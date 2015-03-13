@@ -1,66 +1,21 @@
+import json, operator
 from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView, ListView, DetailView
 from collections import Counter
 from django.db.models import Q
 
-import json, operator
-
 from oaiharvests.models import Community, Collection, Record, MetadataElement
 
-from .mixins import RecordSearchMixin, MapDataMixin
+from .mixins import RecordSearchMixin
 
 
-class HomeView(MapDataMixin, TemplateView):
+class HomeView(TemplateView):
     template_name = 'home.html'
     queryset = None
 
     def get_context_data(self, **kwargs):
-        # mapped_records = []
-
-        # Query and variables for the needed MetadataElments
-        metadata = MetadataElement.objects.all()
-
-        # Create dictionary with language frequency counts using Counter
-        language_frequencies = Counter()
-        for metaelement in metadata.filter(element_type='language'):
-            language_frequencies.update(json.loads(metaelement.element_data))
-
-        # Create dictionary with contributor frequency counts using Counter
-        contributor_frequencies = Counter()
-        for metaelement in metadata.filter(element_type='contributor'):
-            contributor_frequencies.update(json.loads(metaelement.element_data))
-
-        # mapped_plots = set()    # unique coords in mapped records
-        # mapped_languages = set()  # unique languages in mapped records
-
-        self.queryset = Record.objects.filter(data__element_type='coverage')
-
-        # Only retrieve metadata items that have data values set for coverage
-        # for metaelement in metadata.filter(element_type='coverage').exclude(element_data=[]):
-        #     # mapped_plots.add( make_map_plot(metaelement.element_data) )
-        #     record_dict = metaelement.record.as_dict()
-
-        #     mapped_languages |= set(record_dict['language'])
-        #     mapped_records.append(record_dict)
-
-        # mapped_plots=make_json_map_plots(mapped_plots)
-
-        ######################## Preparing context to render in template ######
         context = super(HomeView, self).get_context_data(**kwargs)
-        context['communities'] = Community.objects.all()
-        context['collections'] = Collection.objects.all().order_by('name')
-        context['languages'] = sorted(
-            language_frequencies.iteritems(), key=operator.itemgetter(1), reverse=True)
-        context['contributors'] = sorted(
-            contributor_frequencies.iteritems(), key=operator.itemgetter(1), reverse=True)
-        context['default'] = get_object_or_404(
-            Community, identifier='com_10125_27123')
-
-        # context['mapped_records'] = sorted(
-        #     mapped_records, key=operator.itemgetter('collection'))
-        # context['mapped_plots'] = unicode(mapped_plots)
-        # context['mapped_languages'] = sorted(mapped_languages)
-
+        context['volumes'] = [(vol, vol.list_records()) for vol in Collection.objects.all()]
         return context
 
 
@@ -83,7 +38,7 @@ class CollectionListView(ListView):
         return context
 
 
-class CollectionView(MapDataMixin, DetailView):
+class CollectionView( DetailView):
     model = Collection
     template_name = 'collection_view.html'
     queryset = None
@@ -106,7 +61,7 @@ class ItemView(DetailView):
         return context
 
 
-class LanguageView(MapDataMixin, ListView):
+class LanguageView( ListView):
     model = Record
     template_name = 'collection_view.html'
 
@@ -122,7 +77,7 @@ class LanguageView(MapDataMixin, ListView):
         return context
 
 
-class ContributorView(MapDataMixin, ListView):
+class ContributorView(ListView):
     model = Record
     template_name = 'collection_view.html'
 
