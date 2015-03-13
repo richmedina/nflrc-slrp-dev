@@ -38,5 +38,7 @@ Thumbs.db
 # Project specific exclusions #
 ############
 *-prod.py
+prod-wsgi.py
+prod-nflrcllt-hawaii-edu.py
 
 
