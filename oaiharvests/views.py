@@ -1,7 +1,7 @@
 from django.shortcuts import render, render_to_response
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse, reverse_lazy
-from django.utils import timezone
+from django.utils import timezone, dateparse
 
 from django import forms
 
@@ -18,7 +18,7 @@ from oaipmh.metadata import MetadataRegistry, oai_dc_reader
 
 from .models import Repository, Community, Collection, MetadataElement, Record
 from .forms import CreateRepositoryForm, CreateCommunityForm, CreateCollectionForm
-from .utils import OAIUtils
+from .utils import OAIUtils, get_bitstream_url
 
 class OaiRepositoryListView(ListView):
     model = Repository
@@ -50,6 +50,7 @@ class OaiRepositoryCreateView(CreateView):
 class OaiRepositoryUpdateView(UpdateView):
     model = Repository
     template_name = 'oai_repository_form.html'
+    fields = ['name']
 
     def get_context_data(self, **kwargs):
         context = super(OaiRepositoryUpdateView, self).get_context_data(**kwargs)
@@ -63,7 +64,6 @@ class OaiRepositoryDeleteView(DeleteView):
     success_url = reverse_lazy('oai_repository_list')
 
 
-
 class OaiCommunityView(DetailView):
     model = Community
     template_name = 'oai_community_detail.html'
@@ -72,6 +72,7 @@ class OaiCommunityView(DetailView):
         context = super(OaiCommunityView, self).get_context_data(**kwargs)
         context['collections'] = self.get_object().list_collections()
         return context
+
 
 class OaiCommunityCreateView(DetailView):
     model = Repository
@@ -104,14 +105,17 @@ class OaiCommunityCreateView(DetailView):
         context['form'] = form
         return context
 
+
 class OaiCommunityUpdateView(UpdateView):
     model = Community
     template_name = 'oai_collection_form.html'
+    fields = ['name']
 
     def get_context_data(self, **kwargs):
         context = super(OaiCommunityUpdateView, self).get_context_data(**kwargs)        
         context['view_type'] = 'update community collection info'
         return context
+
 
 class OaiCommunityDeleteView(DeleteView):
     model = Community
@@ -135,6 +139,9 @@ class OaiCollectionView(DetailView):
 
 
 class OaiCollectionCreateView(DetailView):
+    """Creates a db object for a specific collection. Listed options are 
+    derived from a listing of collections from the community."""
+
     model = Community
     template_name = 'oai_collection_form.html'
     oai = OAIUtils()
@@ -159,20 +166,23 @@ class OaiCollectionCreateView(DetailView):
         
         # self.oai = OAIUtils()
         self.oai.list_oai_collections(self.get_object())
-        # print "collections found: %s" % self.oai.collections
+        print "collections found: %s" % self.oai.collections
         form = CreateCollectionForm(community=self.get_object(), collections_list=self.oai.collections)
         context['form'] = form
         context['view_type'] = 'add new collection'
         return context
 
+
 class OaiCollectionUpdateView(UpdateView):
     model = Collection
     template_name = 'oai_collection_form.html'
+    fields = ['name']
 
     def get_context_data(self, **kwargs):
         context = super(OaiCollectionUpdateView, self).get_context_data(**kwargs)        
         context['view_type'] = 'update collection info'
         return context
+
 
 class OaiCollectionDeleteView(DeleteView):
     model = Collection
@@ -189,69 +199,52 @@ class OaiCollectionHarvestView(DetailView):
     model = Collection
     template_name = 'oai_collection_detail.html'
     
-    
     def get_context_data(self, **kwargs):
         context = super(
             OaiCollectionHarvestView, self).get_context_data(**kwargs)
         oai = OAIUtils()
         collection = self.get_object()
         repository = collection.community.repository
-        records = oai.harvest_oai_collection_records(collection)
+        records = oai.harvest_oai_collection_records_sickle(collection)
 
-        for i in records:
-            
-            """ Read Header """
-            repo_date = timezone.make_aware(i[0].datestamp(), timezone.get_default_timezone())
+        for record in records:
+            # Read Header
+            repo_date = dateparse.parse_datetime(record.header.datestamp)
             try:
-                record = Record.objects.get(identifier=i[0].identifier())
-                
-                """ Check Harvest Date """
-                # if repo_date > record.hdr_datestamp:
-                    # record.remove_data()
-                    # record.hdr_datestamp = repo_date
-                record.remove_data()
-                record.hdr_datestamp = repo_date
+                record_obj = Record.objects.get(identifier=record.header.identifier)            
+                record_obj.remove_data()
+                record_obj.hdr_datestamp = repo_date
 
             except:
-                record = Record()
-                record.identifier = i[0].identifier()
-                record.hdr_datestamp = repo_date
-                record.hdr_setSpec = collection
+                record_obj = Record()
+                record_obj.identifier = record.header.identifier
+                record_obj.hdr_datestamp = repo_date
+                record_obj.hdr_setSpec = collection
             
-            record.save()
+            record_obj.save()
 
-            """ Read Metadata """
-
-            dataelements = i[1].getMap()
+            # Read Metadata
+            dataelements = record.metadata
+            print type(dataelements)
             for key in dataelements:
                 element = MetadataElement()
-                element.record = record
+                element.record = record_obj
                 element.element_type = key
                 data = dataelements[key]
-                # datastring = ''
-                # for i in data:
-                #     datastring += i
-                # print datastring
-                """ Data parser for the different elements note we save in json """
-                if key == 'coverage' and data:
-                    #pdb.set_trace()
-                    coordinates = []
-                    coordinates.append(data[0].partition(';')[0].partition('=')[2])
-                    coordinates.append(data[0].partition(';')[2].partition('=')[2])
-                    element.element_data = json.dumps(coordinates)
-                else:
-                    element.element_data = json.dumps(data)
+                element.element_data = json.dumps(data)
                 element.save()
+
+            element = MetadataElement()
+            element.record = record_obj
+            element.element_type = 'bitstream'
+            element.element_data = json.dumps([get_bitstream_url(collection, record)])
+            element.save()
 
         context['records'] = self.get_object().record_set.all()
         context['num_records'] = self.get_object().count_records()
         return context
 
-
-
-
-
-
+# http://scholarspace.manoa.hawaii.edu/dspace-oai/request?verb=GetRecord&identifier=oai:scholarspace.manoa.hawaii.edu:10125/24502&metadataPrefix=oai_dc
 
 # Sample request for a single collection
 # http://scholarspace.manoa.hawaii.edu/dspace-oai/request?verb=ListRecords&metadataPrefix=oai_dc&set=col_10125_7735

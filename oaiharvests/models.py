@@ -55,14 +55,14 @@ class Collection(TimeStampedModel):
     def list_records(self):
         return self.record_set.all()
 
-    def __unicode__(self):
-        return self.name
-
     def get_absolute_url(self):
        return reverse('collection', args=[str(self.identifier)])
 
-class Record(TimeStampedModel):
+    def __unicode__(self):
+        return self.name
 
+
+class Record(TimeStampedModel):
     """OAI conception of an ITEM"""
     identifier = models.CharField(max_length=256, unique=True)
     hdr_datestamp = models.DateTimeField()
@@ -89,30 +89,22 @@ class Record(TimeStampedModel):
         
         return json_metadata
 
-
-    """Sort record dictionary by key"""
+    # Sort record dictionary by key
     def sort_metadata_dict(self, record_dict):
         return OrderedDict(sorted(record_dict.items(), key=lambda t: t[0]))
 
     def as_dict(self):
         record_dict = {}
         elements = self.data.all().order_by('element_type')
+        print elements
         for e in elements:
             data = json.loads(e.element_data)
-            if e.element_type == 'coverage': 
-                try:               
-                    record_dict['coverage_lat'] = [data[0]]
-                    record_dict['coverage_lng'] = [data[1]]
-                except:
-                    record_dict['coverage_lat'] = []
-                    record_dict['coverage_lng'] = []
-            else:
-                record_dict[e.element_type] = data
-        record_dict['collection'] = [self.hdr_setSpec]
-        record_dict['site_url'] = [self.get_absolute_url()]
+            record_dict[e.element_type] = data
+            record_dict['collection'] = [self.hdr_setSpec]
+            record_dict['site_url'] = [self.get_absolute_url()]
         return self.sort_metadata_dict(record_dict)
 
-    """Function to get the coordinates of the element to plot in map """
+    # Function to get the coordinates of the element to plot in map 
     def get_coordinates(self, json_position):
         coords = {
             "lat":json_position[0], 
@@ -123,7 +115,7 @@ class Record(TimeStampedModel):
 
     def __unicode__(self):
         title = json.loads(self.get_metadata_item('title')[0].element_data)[0]
-        return '%s - %s'%(self.hdr_setSpec, title)
+        return '%s'%(title)
 
     def get_absolute_url(self):
         return reverse('item', args=[str(self.id)])
@@ -141,6 +133,7 @@ class MetadataElement(models.Model):
 
     def get_absolute_url(self):
         pass  # return reverse('collection', args=[str(self.id)])
+
 
 class HarvestRegistration(TimeStampedModel):
     """ Records of harvested collections """

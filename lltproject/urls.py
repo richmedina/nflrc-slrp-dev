@@ -1,18 +1,18 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
 
 from django.contrib import admin
 admin.autodiscover()
 
 from lltsite.views import (
-  HomeView, 
-  CommunityView, 
-  CollectionListView, 
-  CollectionView, 
-  ItemView, 
-  LanguageView, 
-  ContributorView, 
-  SearchView,
-  SearchPage
+    HomeView, 
+    CommunityView, 
+    CollectionListView, 
+    CollectionView, 
+    ItemView, 
+    LanguageView, 
+    ContributorView, 
+    SearchView,
+    SearchPage
 )
 
 from oaiharvests.views import (
@@ -32,11 +32,12 @@ from oaiharvests.views import (
     OaiCollectionHarvestView
 )
 
-urlpatterns = patterns('',
+urlpatterns = [
 
    # ---------- SITE VIEWS ------------- #
 
    url(r'^$', HomeView.as_view(), name='home'),
+   
    url(r'^community/(?P<pk>\w+)$',
        CommunityView.as_view(), name='community'),                       
    
@@ -112,4 +113,4 @@ urlpatterns = patterns('',
 
 
    url(r'^admin/', include(admin.site.urls)),
-   )
+]

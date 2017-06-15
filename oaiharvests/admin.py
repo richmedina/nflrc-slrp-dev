@@ -26,7 +26,8 @@ class CommunityAdmin(admin.ModelAdmin):
 	    ]
 
 class CollectionAdmin(admin.ModelAdmin):
-    list_display = ('identifier', 'name', 'community',)
+    list_display = ('pk', 'identifier', 'name', 'community',)
+    list_display_links = ('pk',)
     list_editable = ['identifier', 'name', 'community',]
 	
     inlines = [

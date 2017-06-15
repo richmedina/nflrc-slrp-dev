@@ -2,14 +2,14 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 
-{% block page_header %}{% endblock page_header %}
+{% block page_header %}Welcome to the Journal of Language Learning and Techology{% endblock page_header %}
 
 {% block content %}
 	
 <!-- ROW 1 -->
 	<div class="row">
 		<div class="col-md-12 block-center">
-			<h2 class="text-center">About Language Learning and Techology</h2>
+			<h2 class="text-center"></h2>
 		</div>
 	</div>
 
@@ -17,23 +17,16 @@
 	<div class="row">
 	{% for volume in volumes %}
 		<div class="col-md-12 thumbnail">
-			<a href="{% url 'collection' volume.0.identifier %}">{{ volume.0 }}</a>
-			<div class="row">
+			<h3><a href="{% url 'collection' volume.0.identifier %}">{{ volume.0.name }}</a></h3>
+			<ul class="list-unstyled">
 			{% for item in volume.1 %}			
-				<div class="col-md-3">					
-					<h4><a href="{{ item.get_absolute_url }}">{{ item }}</a> </h4>
-				</div>
-			
+				<li><a href="{{ item.get_absolute_url }}" class="btn btn-link">{{ item }}</a></li>
 			{% endfor %}
-			</div>
+			</ul>
 		</div>
 	{% endfor %}
 	</div>
 	
 {% endblock content %}
-
-{% block js_include %} 
-  <!-- Local js -->
-  <!-- <script src="{% static 'js/dla.js' %}"></script> -->
-{% endblock js_include %}			
+		
 
