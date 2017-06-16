@@ -98,7 +98,7 @@ urlpatterns = [
    # Collections #
    url(r'^oaiharvester/collection/(?P<pk>\w+)$',
        OaiCollectionView.as_view(), name='oai_collection'),
-   url(r'^oaiharvester/collection/add/(?P<pk>\w+)$',
+   url(r'^oaiharvester/collection/add/(?P<community>\w+)$',
        OaiCollectionCreateView.as_view(
        ), name='oai_collection_add'),
    url(r'^oaiharvester/collection/edit/(?P<pk>\w+)$',

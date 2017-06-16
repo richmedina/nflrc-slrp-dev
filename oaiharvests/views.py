@@ -18,7 +18,7 @@ from oaipmh.metadata import MetadataRegistry, oai_dc_reader
 
 from .models import Repository, Community, Collection, MetadataElement, Record
 from .forms import CreateRepositoryForm, CreateCommunityForm, CreateCollectionForm
-from .utils import OAIUtils, get_bitstream_url
+from .utils import OAIUtils, get_bitstream_url, filter_existing_collections
 
 class OaiRepositoryListView(ListView):
     model = Repository
@@ -79,7 +79,6 @@ class OaiCommunityCreateView(DetailView):
     template_name = 'oai_community_add_form.html'
     oai = OAIUtils()
 
-
     def post(self, request, **kwargs):
         print 'post->'
         form = CreateCommunityForm(request.POST, repo=self.get_object(), community_list=self.oai.communities)
@@ -138,37 +137,46 @@ class OaiCollectionView(DetailView):
         return context
 
 
-class OaiCollectionCreateView(DetailView):
+class OaiCollectionCreateView(CreateView):
     """Creates a db object for a specific collection. Listed options are 
     derived from a listing of collections from the community."""
-
-    model = Community
+    model = Collection
     template_name = 'oai_collection_form.html'
-    oai = OAIUtils()
-    
+    form_class = CreateCollectionForm
+    community = None    
+
+    def get(self, request, *args, **kwargs):
+        self.community = Community.objects.get(pk=self.kwargs.get('community'))    
+        return super(OaiCollectionCreateView, self).get(request, *args, **kwargs)
+
     def post(self, request, **kwargs):
-        form = CreateCollectionForm(request.POST, community=self.get_object(), collections_list=self.oai.collections)
+        self.community = Community.objects.get(pk=self.kwargs.get('community'))    
+        return super(OaiCollectionCreateView, self).post(request, **kwargs)
 
-        if form.is_valid():            
-            choices = form.fields['identifier'].widget.choices
-            for i in choices:
-                if i[0] == form.instance.identifier:
-                    form.instance.name = i[1]
-                    break
-            form.save()
-            return HttpResponseRedirect(reverse('oai_community', args=[str(self.get_object().identifier)]))
+    def get_form_kwargs(self):
+        kwargs = super(OaiCollectionCreateView, self).get_form_kwargs()
+        oai = OAIUtils()
+        collections = oai.list_oai_collections(self.community)
+        collections = filter_existing_collections(collections)
+        kwargs['community'] = self.community
+        kwargs['collection_list'] = collections
+        return kwargs
 
-        return render_to_response('oai_collection_add_form.html', {'form': form})
-        
+    def form_valid(self, form):            
+        choices = form.fields['identifier'].widget.choices
+        for i in choices:
+            if i[0] == form.instance.identifier:
+                form.instance.name = i[1]
+                break
+        form.save()
+        return HttpResponseRedirect(reverse('oai_community', args=[str(self.community.identifier)]))        
+
+    def get_success_url(self):
+        success_url = reverse('oai_community', args=[str(self.community.identifier)])
+        return success_url
 
     def get_context_data(self, **kwargs):
         context = super(OaiCollectionCreateView, self).get_context_data(**kwargs)        
-        
-        # self.oai = OAIUtils()
-        self.oai.list_oai_collections(self.get_object())
-        print "collections found: %s" % self.oai.collections
-        form = CreateCollectionForm(community=self.get_object(), collections_list=self.oai.collections)
-        context['form'] = form
         context['view_type'] = 'add new collection'
         return context
 

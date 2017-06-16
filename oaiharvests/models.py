@@ -104,15 +104,6 @@ class Record(TimeStampedModel):
             record_dict['site_url'] = [self.get_absolute_url()]
         return self.sort_metadata_dict(record_dict)
 
-    # Function to get the coordinates of the element to plot in map 
-    def get_coordinates(self, json_position):
-        coords = {
-            "lat":json_position[0], 
-            "lng":json_position[1]
-        }
-        print coords
-        return coords
-
     def __unicode__(self):
         title = json.loads(self.get_metadata_item('title')[0].element_data)[0]
         return '%s'%(title)

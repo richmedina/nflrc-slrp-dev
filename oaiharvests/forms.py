@@ -7,7 +7,7 @@ from oaipmh.client import Client
 from oaipmh.metadata import MetadataRegistry, oai_dc_reader
 
 from .models import Repository, Community, Collection
-
+from .utils import OAIUtils, filter_existing_collections
 
 class CreateRepositoryForm(ModelForm):
 
@@ -65,24 +65,24 @@ class CreateCommunityForm(ModelForm):
 class CreateCollectionForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
-
+        
         try:
+            collections = kwargs.pop('collection_list')
             community = kwargs.pop('community')
-            collections = kwargs.pop('collections_list')
-        except:
-            pass
-
+        except Exception as e:
+            print e
+            
         super(CreateCollectionForm, self).__init__(*args, **kwargs)
-
-        self.fields['identifier'] = forms.CharField(
-            widget=forms.Select(choices=collections))
-        self.fields['identifier'].label = 'Select Collection From ' + \
-            community.name + ':'
+        self.fields['identifier'] = forms.CharField(widget=forms.Select(choices=collections))
+        self.fields['identifier'].label = 'Select Collection From ' + community.name + ':'
         self.fields['community'].initial = community
         self.fields['community'].label = community.name
 
     class Meta:
         model = Collection
-        fields = ['identifier', 'name', 'community']
-        widgets = {'name':
-                   forms.HiddenInput(), 'community': forms.HiddenInput()}
+        fields = ['identifier', 'community']
+        widgets = {
+            'identifier': forms.Select(choices=[]),
+            'community': forms.HiddenInput()
+        }
+        
