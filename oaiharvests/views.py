@@ -133,7 +133,7 @@ class OaiCollectionView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(OaiCollectionView, self).get_context_data(**kwargs)
-        context['num_records'] = self.get_object().count_records()
+        context['num_records'] = self.get_object().count_records()       
         return context
 
 

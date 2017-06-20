@@ -6,6 +6,14 @@ from collections import OrderedDict
 import json, operator
 import pdb #pdb.set_trace()
 
+
+"""Metadata element dispay sets"""
+
+TYPES = ['publisher', 'description.provenance', 'identifier.doi', 'title', 'bitstream', 'date.available', 'type.dcmi', 'relation.uri', 'identifier.citation', 'format.extent', 'description.abstract', 'date.accessioned', 'language.iso', 'relation.ispartofseries', 'identifier.issn', 'date.issued', 'identifier.uri', 'type', 'contributor.author', 'subject',]
+
+DISPLAY_TYPE_ORDER = ['title', 'contributor.author', 'description.abstract', 'bitstream', 'subject', 'publisher',]
+
+
 class Repository(TimeStampedModel):
 
     """ A institutional digital library OAI service provider -- e.g., ScholarSpace """
@@ -96,13 +104,27 @@ class Record(TimeStampedModel):
     def as_dict(self):
         record_dict = {}
         elements = self.data.all().order_by('element_type')
-        print elements
+        # print elements
         for e in elements:
             data = json.loads(e.element_data)
             record_dict[e.element_type] = data
             record_dict['collection'] = [self.hdr_setSpec]
             record_dict['site_url'] = [self.get_absolute_url()]
         return self.sort_metadata_dict(record_dict)
+
+    def as_display_dict(self):
+        record_dict = self.as_dict()
+        display_dict = OrderedDict()
+        for tag in DISPLAY_TYPE_ORDER:
+            try:
+                t = tag.split('.')
+                if len(t) > 1:
+                    display_dict[t[1]] = record_dict[tag]
+                else:
+                    display_dict[tag] = record_dict[tag]
+            except:
+                pass
+        return display_dict
 
     def __unicode__(self):
         title = json.loads(self.get_metadata_item('title')[0].element_data)[0]

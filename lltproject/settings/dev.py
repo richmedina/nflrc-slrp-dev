@@ -2,9 +2,11 @@ from .base import *
 
 ALLOWED_HOSTS += ['clt.developers.edu']
 
-INSTALLED_APPS += (
-    'debug_toolbar',
-)
+SECRET_KEY = os.environ['SECRET_KEY']
+
+# INSTALLED_APPS += (
+#     'debug_toolbar',
+# )
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases

@@ -9,9 +9,9 @@ repo = Repository.objects.all()[0]
 com = Community.objects.all()[0]
 batch_harvest_issues(com)
 
-cols = Collection.objects.all()
-oai = OAI()
-issues = oai.list_oai_collections(com)
-recs = oai.harvest_oai_collection_records_sickle(cols[0])
-for i in recs:
-    print i
+# cols = Collection.objects.all()
+# oai = OAI()
+# issues = oai.list_oai_collections(com)
+# recs = oai.harvest_oai_collection_records_sickle(cols[0])
+# for i in recs:
+#     print i

@@ -23,6 +23,7 @@ from sickle.models import Record, Header
 from .models import Collection, Record as LocalRecord, MetadataElement
 
 
+
 def filter_existing_collections(collections):
     """ Returns a list of tuples containing collections not present in local db."""
     collections_filtered = []

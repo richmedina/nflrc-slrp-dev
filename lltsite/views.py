@@ -57,7 +57,8 @@ class ItemView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(ItemView, self).get_context_data(**kwargs)
-        context['item_data'] = self.get_object().as_dict()
+        # context['item_data'] = self.get_object().as_dict()
+        context['item_data'] = self.get_object().as_display_dict()
         return context
 
 
