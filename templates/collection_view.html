@@ -134,12 +134,6 @@
 
 {% endblock content %}
 
-{% block js_script %}
-	<script type="text/javascript">
-		//Get the coordinates info and data from the records inside the DOM
-        var json = {{ mapped_plots|safe }};
-    </script>
-{% endblock js_script %}
 
 {% block js_include %} 
   <!--Google Map js libraries-->
