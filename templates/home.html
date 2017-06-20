@@ -17,7 +17,7 @@
 	<div class="row">
 	{% for volume in volumes %}
 		<div class="col-md-12 thumbnail">
-			<h3><a href="{% url 'collection' volume.0.identifier %}">{{ volume.0.name }}</a></h3>
+			<h3>{{ volume.0.name }}<a href="{% url 'collection' volume.0.identifier %}"> view </a></h3>
 			<ul class="list-unstyled">
 			{% for item in volume.1 %}			
 				<li><a href="{{ item.get_absolute_url }}" class="btn btn-link">{{ item }}</a></li>
