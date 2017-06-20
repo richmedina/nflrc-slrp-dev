@@ -61,37 +61,43 @@ def batch_harvest_articles(collection_obj):
 
     for record in records:
         # Read Header
-        repo_date = dateparse.parse_datetime(record.header.datestamp)
-        try:
-            record_obj = LocalRecord.objects.get(identifier=record.header.identifier)            
-            record_obj.remove_data()
-            record_obj.hdr_datestamp = repo_date
+        if not record.header.deleted:
+            repo_date = dateparse.parse_datetime(record.header.datestamp)
+            try:
+                record_obj = LocalRecord.objects.get(identifier=record.header.identifier)            
+                record_obj.remove_data()
+                record_obj.hdr_datestamp = repo_date
 
-        except Exception as e:
-            print e
-            record_obj = LocalRecord()
-            record_obj.identifier = record.header.identifier
-            record_obj.hdr_datestamp = repo_date
-            record_obj.hdr_setSpec = collection_obj
-        
-        record_obj.save()
+            except Exception as e:
+                print 'Creating new Record object.', record.header.identifier
+                record_obj = LocalRecord()
+                record_obj.identifier = record.header.identifier
+                record_obj.hdr_datestamp = repo_date
+                record_obj.hdr_setSpec = collection_obj
+            
+            record_obj.save()
 
-        # Read Metadata
-        dataelements = record.metadata
-        for key in dataelements:
+            # Read Metadata
+            dataelements = record.metadata
+            for key in dataelements:
+                element = MetadataElement()
+                element.record = record_obj
+                element.element_type = key
+                data = dataelements[key]
+                element.element_data = json.dumps(data)
+                element.save()
+
             element = MetadataElement()
             element.record = record_obj
-            element.element_type = key
-            data = dataelements[key]
-            element.element_data = json.dumps(data)
+            element.element_type = 'bitstream'
+            element.element_data = json.dumps([get_bitstream_url(collection_obj, record)])
             element.save()
-
-        element = MetadataElement()
-        element.record = record_obj
-        element.element_type = 'bitstream'
-        element.element_data = json.dumps([get_bitstream_url(collection_obj, record)])
-        element.save()        
-
+        else:
+            try:
+                record_obj = LocalRecord.objects.get(identifier=record.header.identifier)
+                record_obj.delete()     
+            except:
+                pass
 def batch_harvest_issues(community_obj):
     oai = OAIUtils()
     issues = oai.list_oai_collections(community_obj)
@@ -111,9 +117,10 @@ class LltRecord(Record):
     def __init__(self, record_element, strip_ns=True):
         super(LltRecord, self).__init__(record_element, strip_ns=strip_ns)
         self.header = Header(self.xml.find('.//' + self._oai_namespace + 'header'))
-
-        tree = self.xml.find('.//' + self._oai_namespace + 'metadata').getchildren()[0]
-        self.metadata = dim_xml_to_dict(tree)
+        print self.header.identifier, self.header.deleted
+        if not self.header.deleted:
+            tree = self.xml.find('.//' + self._oai_namespace + 'metadata').getchildren()[0]
+            self.metadata = dim_xml_to_dict(tree)
 
 
 class LltRecordBitstream(Record):
@@ -193,5 +200,5 @@ class OAIUtils(object):
         sickle = Sickle(collection.community.repository.base_url)
         sickle.class_mapping['ListRecords'] = LltRecord
         sickle.class_mapping['GetRecord'] = LltRecord
-        records = sickle.ListRecords(metadataPrefix='dim', set=collection.identifier)
+        records = sickle.ListRecords(metadataPrefix='dim', ignore_deleted=True, set=collection.identifier)
         return records

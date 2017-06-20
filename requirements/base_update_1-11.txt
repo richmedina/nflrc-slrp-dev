@@ -4,7 +4,6 @@ cffi==1.10.0
 chardet==3.0.4
 cryptography==1.9
 Django==1.11.2
-django-debug-toolbar==1.8
 django-model-utils==3.0.0
 ecdsa==0.13
 enum34==1.1.6
