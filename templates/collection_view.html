@@ -3,7 +3,11 @@
 {% load staticfiles %}
 
 
-{% block page_header %}{{ object }}{% endblock page_header %}
+{% block page_header %}
+<h4><i class="fa fa-caret-left"></i> <a href="{% url 'home' %}">Volumes</a></h4>
+
+<h2>{{ object }}</h2>
+{% endblock page_header %}
 
 {% block content %}	
 

@@ -9,6 +9,7 @@ from lltsite.views import (
     CollectionListView, 
     CollectionView, 
     ItemView, 
+    ItemViewFull,
     LanguageView, 
     ContributorView, 
     SearchView,
@@ -49,7 +50,10 @@ urlpatterns = [
    
    url(r'^item/(?P<pk>\w+)$',
        ItemView.as_view(), name='item'),
-   
+
+   url(r'^item-detail/(?P<pk>\w+)$',
+       ItemViewFull.as_view(), name='item_full'),
+
    url(r'^language/(?P<query>\w+)$',
        LanguageView.as_view(), name='language'),
    

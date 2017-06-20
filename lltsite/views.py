@@ -60,6 +60,16 @@ class ItemView(DetailView):
         return context
 
 
+class ItemViewFull(DetailView):
+    model = Record
+    template_name = 'item_view_full.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(ItemViewFull, self).get_context_data(**kwargs)
+        context['item_data'] = self.get_object().as_dict()
+        return context
+
+
 class LanguageView( ListView):
     model = Record
     template_name = 'collection_view.html'

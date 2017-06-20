@@ -2,7 +2,7 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 
-{% block page_header %}The Journal of Language Learning and Techology{% endblock page_header %}
+{% block page_header %}<h2>The Journal of Language Learning and Technology</h2>{% endblock page_header %}
 
 {% block content %}
 	
@@ -18,7 +18,18 @@
 	{% for volume in volumes %}
 		<div class="col-md-10 col-md-offset-1">
 			<ul class="list-unstyled">
-				<li>{{ volume.0.name }} <a href="{% url 'collection' volume.0.identifier %}">view</a></li>
+				<li class="border-space"><h4><a href="{% url 'collection' volume.0.identifier %}">{{ volume.0.name }}</a>{% if forloop.first %} <sup><span class="badge">latest</span></sup>{% endif %}</h4></li>
+				{% if forloop.first %}
+				<li>
+					<dl class="">
+						<div class="row">					
+							<div class="col-md-4"><dt>Columns</dt>{% for i in volume.0.list_toc.Column %}<dd style="padding: 4px"><a href="{{ i.get_absolute_url }}">{{ i }}</a></dd>{% endfor %}</div>
+							<div class="col-md-4"><dt>Articles</dt>{% for i in volume.0.list_toc.Article %}<dd style="padding: 4px"><a href="{{ i.get_absolute_url }}">{{ i }}</a></dd>{% endfor %}</div>
+							<div class="col-md-4"><dt>Reviews</dt>{% for i in volume.0.list_toc.Review %}<dd style="padding: 4px"><a href="{{ i.get_absolute_url }}">{{ i }}</a></dd>{% endfor %}</div>
+						</div>
+					</dl>
+				</li>
+				{% endif %}
 			</ul>
 
 
