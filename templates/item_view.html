@@ -1,23 +1,40 @@
 <!-- item_view.html -->
 {% extends 'base.html' %}
 
-{% block page_header %}<small></small>{% endblock page_header %}
+{% block page_header %}{{ object }}{% endblock page_header %}
 
 {% block content %}
-	<h2>{{ item_data.title.0 }}</h2>
-	<h4>{% for i in item_data.author %}{{ i }}{% if not forloop.last %}; {% endif %}{% endfor %}</h4>
-	{% comment %}
-	{% for k,v in item_data.items %}
-		<h5>
-			<i>{{ k }}</i>: 
-			{%for i in v %}	
-				<span><b>
-					{% if k == 'identifier' %} {{ i|urlize }} {% else %} {{ i }} {% endif %}
-					{% if not forloop.last %};{% endif %}
-				</b></span> 
-			{% endfor %}
-		</h5>
-	{% endfor %}
-	{% endcomment %}
-	<iframe width="100%" height="1200px" src="{{ item_data.bitstream.0}}"></iframe>		
+<div class="row">
+	<div class="col-md-3">
+		<dl>
+			<dt class="metadata">authors</dt><dd>{% for i in item_data.author %}{{ i }}{% if not forloop.last %}; {% endif %}{% endfor %}</dt></dd>
+			<dt class="metadata">volume</dt><dd>{% for i in item_data.ispartofseries %}{{ i }}{% if not forloop.last %}; {% endif %}{% endfor %}</dd>
+			<dt class="metadata">issued</dt><dd>{% for i in item_data.issued %}{{ i }}{% if not forloop.last %}; {% endif %}{% endfor %}</dd>
+			<dt class="metadata">publisher</dt><dd>{% for i in item_data.publisher %}{{ i }}{% if not forloop.last %}; {% endif %}{% endfor %}</dd>
+			{% if item_data.doi %}<dt class="metadata">doi</dt><dd><a href="{{ item_data.doi.0}}">{{ item_data.doi.0 }}</a></dd>{% endif %}
+			<dt class="metadata">uri</dt><dd><a class="" href="{{ item_data.uri.0}}">{{ item_data.uri.0 }}</a> </dd>
+			<dt class="metadata">pdf</dt><dd><a class="" href="{{ item_data.bitstream.0 }}">pdf</a></dd>
+			<dt class="metadata">citation</dt><dd>{{ item_data.citation.0 }}</dd>
+			<dt class="metadata">subjects</dt><dd>{% for i in item_data.subject %}{{ i }}{% if not forloop.last %}; {% endif %}{% endfor %}</dt></dd>
+		</dl>
+		
+	</div>
+	<div class="col-md-9">
+		<iframe width="100%" height="1200px" src="{{ item_data.bitstream.0}}" style="background-color: white"></iframe>	
+	</div>
+</div>
+{% comment %}
+<div class="row">
+	<h3><small>{{ object }} -> {{object.modified}} </small></h3>
+		<div>
+			{% if object.hdr_datestamp > object.modified %} <h3>Out of date</h3> {% endif %}
+			<h5> Updated on: {{ object.hdr_datestamp }}</h5>
+			<h4> Last Harvested on: {{ object.modified }}</h4>
+		</div>
+		{% for j in object.metadata_items %}
+			<div>{{ j }}</div>
+		{% endfor %}
+</div>
+{% endcomment %}
+		
 {% endblock content %}

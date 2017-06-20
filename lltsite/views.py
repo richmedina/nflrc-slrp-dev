@@ -15,7 +15,7 @@ class HomeView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(HomeView, self).get_context_data(**kwargs)
-        context['volumes'] = [(vol, vol.list_records()) for vol in Collection.objects.all()]
+        context['volumes'] = [(vol, vol.list_records()) for vol in Collection.objects.all().order_by('-name')]
         return context
 
 
@@ -38,16 +38,15 @@ class CollectionListView(ListView):
         return context
 
 
-class CollectionView( DetailView):
+class CollectionView(DetailView):
     model = Collection
     template_name = 'collection_view.html'
     queryset = None
 
     def get_context_data(self, **kwargs):
-        self.queryset = self.get_object().list_records()
         context = super(CollectionView, self).get_context_data(**kwargs)
-        context['items'] = self.queryset
-        context['size'] = len(self.queryset)
+        context['toc'] = dict(self.get_object().list_toc())
+        context['size'] = len(context['toc'])
         return context
 
 
@@ -57,7 +56,6 @@ class ItemView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(ItemView, self).get_context_data(**kwargs)
-        # context['item_data'] = self.get_object().as_dict()
         context['item_data'] = self.get_object().as_display_dict()
         return context
 

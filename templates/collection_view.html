@@ -8,8 +8,24 @@
 {% block content %}	
 
 	<div class="row">
-		<div class="col-md-12">
-			
+
+		<div class="col-md-4">
+			<h4 class="border-space">Columns</h4>
+			{% for doc in toc.Column %} 
+				<p><a href="{{ doc.get_absolute_url }}">{{ doc }}</a></p>
+			{% endfor %}
+		</div>
+		<div class="col-md-4">
+			<h4 class="border-space">Articles</h4>
+			{% for doc in toc.Article %} 
+				<p><a href="{{ doc.get_absolute_url }}">{{ doc }}</a></p>
+			{% endfor %}		
+		</div>
+		<div class="col-md-4">
+			<h4 class="border-space">Reviews</h4>
+			{% for doc in toc.Review %} 
+				<p><a href="{{ doc.get_absolute_url }}">{{ doc }}</a></p>
+			{% endfor %}		
 		</div>
 
 	</div>
@@ -83,7 +99,7 @@
 				  </li>
 				  <li class="next"><a>Next &rarr;</a></li>
 				</ul>
--->
+
 				<div class="searchBox">
 					{% for i in items %}
 							<div class="panel panel-default">
@@ -114,7 +130,7 @@
 			</div>
 		</div>
 	</div>
-
+-->
 
 {% endblock content %}
 

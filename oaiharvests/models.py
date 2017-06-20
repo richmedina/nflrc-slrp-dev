@@ -1,7 +1,7 @@
 from django.db import models
 from django.core.urlresolvers import reverse
 from model_utils.models import TimeStampedModel
-from collections import OrderedDict
+from collections import OrderedDict, defaultdict
 
 import json, operator
 import pdb #pdb.set_trace()
@@ -11,7 +11,7 @@ import pdb #pdb.set_trace()
 
 TYPES = ['publisher', 'description.provenance', 'identifier.doi', 'title', 'bitstream', 'date.available', 'type.dcmi', 'relation.uri', 'identifier.citation', 'format.extent', 'description.abstract', 'date.accessioned', 'language.iso', 'relation.ispartofseries', 'identifier.issn', 'date.issued', 'identifier.uri', 'type', 'contributor.author', 'subject',]
 
-DISPLAY_TYPE_ORDER = ['title', 'contributor.author', 'description.abstract', 'bitstream', 'subject', 'publisher',]
+DISPLAY_TYPE_ORDER = ['title', 'contributor.author', 'description.abstract', 'bitstream', 'subject', 'publisher', 'type', 'relation.ispartofseries', 'date.issued', 'identifier.doi', 'identifier.uri', 'identifier.citation',]
 
 
 class Repository(TimeStampedModel):
@@ -62,6 +62,14 @@ class Collection(TimeStampedModel):
 
     def list_records(self):
         return self.record_set.all()
+
+    def list_toc(self):
+        toc = defaultdict(list)
+        for i in self.list_records():
+            d = i.as_dict()
+            for j in d['type']:
+                toc[j].append(i)
+        return toc
 
     def get_absolute_url(self):
        return reverse('collection', args=[str(self.identifier)])

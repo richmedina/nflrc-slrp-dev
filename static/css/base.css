@@ -11,6 +11,17 @@ body {
   font-weight: 400;
 }
 
+.border-space {
+  border-bottom: solid 1px gray;
+  padding-top: 8px;
+}
+
+
+dt.metadata {
+  border-bottom: solid 1px gray;
+  padding-top: 8px;
+}
+
 .navbar-fixed-top {
   background: #fff;
 }

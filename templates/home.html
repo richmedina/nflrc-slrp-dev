@@ -2,7 +2,7 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 
-{% block page_header %}Welcome to the Journal of Language Learning and Techology{% endblock page_header %}
+{% block page_header %}The Journal of Language Learning and Techology{% endblock page_header %}
 
 {% block content %}
 	
@@ -16,13 +16,20 @@
 <!-- ROW 2 -->
 	<div class="row">
 	{% for volume in volumes %}
-		<div class="col-md-12 thumbnail">
-			<h3>{{ volume.0.name }}<a href="{% url 'collection' volume.0.identifier %}"> view </a></h3>
+		<div class="col-md-10 col-md-offset-1">
+			<ul class="list-unstyled">
+				<li>{{ volume.0.name }} <a href="{% url 'collection' volume.0.identifier %}">view</a></li>
+			</ul>
+
+
+
+{% comment %} 			
 			<ul class="list-unstyled">
 			{% for item in volume.1 %}			
 				<li><a href="{{ item.get_absolute_url }}" class="btn btn-link">{{ item }}</a></li>
 			{% endfor %}
 			</ul>
+{% endcomment %}
 		</div>
 	{% endfor %}
 	</div>
