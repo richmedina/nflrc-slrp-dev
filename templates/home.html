@@ -2,7 +2,8 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 
-{% block page_header %}<h2>The Journal of Language Learning and Technology</h2>{% endblock page_header %}
+
+{% block submenu %}{{ block.super }}{% endblock submenu %}
 
 {% block content %}
 	
@@ -15,34 +16,46 @@
 
 <!-- ROW 2 -->
 	<div class="row">
-	{% for volume in volumes %}
-		<div class="col-md-10 col-md-offset-1">
+	
+		<div class="col-md-9">
+		{% for volume in volumes %}
 			<ul class="list-unstyled">
-				<li class="border-space"><h4><a href="{% url 'collection' volume.0.identifier %}">{{ volume.0.name }}</a>{% if forloop.first %} <sup><span class="badge">latest</span></sup>{% endif %}</h4></li>
-				{% if forloop.first %}
 				<li>
-					<dl class="">
-						<div class="row">					
-							<div class="col-md-4"><dt>Columns</dt>{% for i in volume.0.list_toc.Column %}<dd style="padding: 4px"><a href="{{ i.get_absolute_url }}">{{ i }}</a></dd>{% endfor %}</div>
-							<div class="col-md-4"><dt>Articles</dt>{% for i in volume.0.list_toc.Article %}<dd style="padding: 4px"><a href="{{ i.get_absolute_url }}">{{ i }}</a></dd>{% endfor %}</div>
-							<div class="col-md-4"><dt>Reviews</dt>{% for i in volume.0.list_toc.Review %}<dd style="padding: 4px"><a href="{{ i.get_absolute_url }}">{{ i }}</a></dd>{% endfor %}</div>
+					{% if forloop.first %}
+						<sup><span class="badge">latest</span></sup> <a href="{% url 'collection' volume.0.identifier %}" class="btn btn-lg btn-link static_a_display">{{ volume.0.name }}</a>
+					{% else %}
+						<a href="{% url 'collection' volume.0.identifier %}" class="btn btn-md btn-link static_a_display">{{ volume.0.name }}</a>
+					{% endif %}
+					</h3>
+				</li>
+				
+				{% if forloop.first %}
+				<li>					
+					<div class="row">					
+						<div class="col-md-6">							
+							{% if volume.0.list_toc.Column %}<h4 class="border-space">Columns</h4>{% endif %}
+							{% for i in volume.0.list_toc.Column %}<p><a href="{{ i.get_absolute_url }}">{{ i }}</a></p>{% endfor %}
+							
+							{% if volume.0.list_toc.Review %}<h4 class="border-space">Reviews</h4>{% endif %}
+							{% for i in volume.0.list_toc.Review %}<p><a href="{{ i.get_absolute_url }}">{{ i }}</a></p>{% endfor %}
 						</div>
-					</dl>
+						<div class="col-md-6">
+							{% if volume.0.list_toc.Article %}<h4 class="border-space">Articles</h4>{% endif %}
+							{% for i in volume.0.list_toc.Article %}<p><a href="{{ i.get_absolute_url }}">{{ i }}</a></p>{% endfor %}
+						</div>		
+					</div>
 				</li>
 				{% endif %}
+
 			</ul>
-
-
-
-{% comment %} 			
-			<ul class="list-unstyled">
-			{% for item in volume.1 %}			
-				<li><a href="{{ item.get_absolute_url }}" class="btn btn-link">{{ item }}</a></li>
 			{% endfor %}
-			</ul>
-{% endcomment %}
 		</div>
-	{% endfor %}
+		<div class="col-md-3">
+			<div class="row">
+				<div class="col-md-12"><h1>Impact Factor 2.33</h1></div>
+			</div>
+		</div>
+	
 	</div>
 	
 {% endblock content %}

@@ -11,11 +11,15 @@ body {
   font-weight: 400;
 }
 
+.static_a_display:link {color: #666; text-decoration: none;}
+.static_a_display:visited {color: #666; text-decoration: none;}
+.static_a_display:hover {color: #000; text-decoration: none;}
+.static_a_display:active {color: #666; text-decoration: none;}
+
 .border-space {
   border-bottom: solid 1px gray;
   /*margin-bottom: 8px;*/
 }
-
 
 dt.metadata {
   border-bottom: solid 1px gray;
@@ -24,18 +28,33 @@ dt.metadata {
 
 .navbar-fixed-top {
   background: #fff;
+  /*height: 100px;*/
+  border: none;
 }
 
 .navbar-fixed-bottom {
   text-align: center;
 }
 
-/******************************** Colors **********************************************/
-.clr-collection { background-color: #143D29 }
-.clr-language { background-color: #143D29 }
-.clr-contributor { background-color: #143D29 }
+/******************************** Centered Submenu **********************************************/
 
-/******************************** End Colors **********************************************/
+.submenu ul{
+
+ /*   margin:auto;*/
+    margin-bottom:30px;
+    width: 100%;
+    text-align:center;
+
+}
+
+.submenu li {
+    display: inline-block;
+    padding-left: 10px;
+    padding-bottom: 15px;
+    background: #fff 
+
+}
+/******************************** End Centered Submenu **********************************************/
 
 
 /******************************** Box Borders **********************************************/
@@ -47,21 +66,64 @@ dt.metadata {
 .list-group-item.hilite_row {
   background-color: #B2D1B2
 }
-
-#search {
-  border: 1px solid black;
-  padding: 1px;
-  margin: 10px;
-}
 /******************************** End Box Borders **********************************************/
 
+/*FLEXIBLE PILLS*/
 
-/******************************** Search UI box **************************************************/
-.searchBox {
-  line-height:200%;
+.nav-pills-flex {
+    font-family: 'Open Sans', sans-serif;
+    font-size:14px;
+    background: #fff 
 }
 
-.searchBox li {
-  list-style-type: none;
+.nav-pills-flex li a:link {
+    color: #999; border-radius: 3px;
 }
-/******************************** End Search UI box **********************************************/
+
+.nav-pills-flex > li.mauve > a, .nav-pills-flex > li.mauve > a:hover, .nav-pills-flex > li.mauve > a:focus {
+    background-color: #791a06;
+    color: #fff;
+}
+
+.nav-pills-flex > li.yellow > a, .nav-pills-flex > li.yellow > a:hover, .nav-pills-flex > li.yellow > a:focus {
+    background-color: #f0b210;
+    color: #fff;
+}
+
+.nav-pills-flex > li.red > a, .nav-pills-flex > li.red > a:hover, .nav-pills-flex > li.red > a:focus {
+    background-color: #ce5043;
+    color: #fff;
+}
+
+.nav-pills-flex > li.blue > a, .nav-pills-flex > li.blue > a:hover, .nav-pills-blue > li.blue > a:focus {
+    background-color: #1aa1e1;
+    color: #fff;
+}
+
+.nav-pills-flex > li.green > a, .nav-pills-flex > li.green > a:hover, .nav-pills-flex > li.green > a:focus {
+    background-color: #b3c833;
+    color: #fff;
+}
+
+.nav-pills-flex > li.navy > a, .nav-pills-flex > li.navy > a:hover, .nav-pills-navy > li.navy > a:focus {
+    background-color: #3f5ca9;
+    color: #fff;
+}
+.nav-pills-flex > li.silver > a, .nav-pills-flex > li.silver > a:hover, .nav-pills-silver > li.silver > a:focus {
+    background-color: #658092;
+    color: #fff;
+}
+
+.nav-pills-flex > li.gray > a, .nav-pills-flex > li.gray > a:hover, .nav-pills-gray > li.gray > a:focus {
+    background-color: #CCCCCC;
+    color: #fff;
+}
+.nav-pills-flex > li.orange > a, .nav-pills-flex > li.orange > a:hover, .nav-pills-flex > li.orange > a:focus {
+    background-color: #fb8521;
+    color: #fff;
+}
+
+.nav-pills-flex > li.black > a, .nav-pills-flex > li.black > a:hover, .nav-pills-blue > li.black > a:focus {
+    background-color: #333;
+    color: #fff;
+}
