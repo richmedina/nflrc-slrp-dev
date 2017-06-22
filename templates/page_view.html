@@ -1,0 +1,12 @@
+<!-- page_view.html -->
+{% extends 'base.html' %}
+
+{% block page_header %}<h2>{{ page.title }}</h2>{% endblock page_header %}
+
+{% block content %}
+<div class="row">
+	<div class="col-md-12">
+		{{ page.content|safe }}
+	</div>
+</div>		
+{% endblock content %}

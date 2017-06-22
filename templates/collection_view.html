@@ -4,7 +4,7 @@
 
 
 {% block page_header %}
-<h4><i class="fa fa-caret-left"></i> <a href="{% url 'home' %}">Volumes</a></h4>
+<h4><i class="fa fa-caret-left"></i> <a href="{% url 'home' %}" class="static_a_display">Volumes</a></h4>
 
 <h2>{{ object }}</h2>
 {% endblock page_header %}
@@ -15,17 +15,17 @@
 		<div class="col-md-6">
 			{% if toc.Column %}<h4 class="border-space">Columns</h4>{% endif %}
 			{% for doc in toc.Column %} 
-				<p><a href="{{ doc.get_absolute_url }}">{{ doc }}</a></p>
+				<p><a href="{{ doc.get_absolute_url }}" class="static_a_display">{{ doc }}</a></p>
 			{% endfor %}
 			{% if toc.Review %}<h4 class="border-space">Reviews</h4>{% endif %}
 			{% for doc in toc.Review %} 
-				<p><a href="{{ doc.get_absolute_url }}">{{ doc }}</a></p>
+				<p><a href="{{ doc.get_absolute_url }}" class="static_a_display">{{ doc }}</a></p>
 			{% endfor %}
 		</div>
 		<div class="col-md-6">
 			{% if toc.Article %}<h4 class="border-space">Articles</h4>{% endif %}
 			{% for doc in toc.Article %} 
-				<p><a href="{{ doc.get_absolute_url }}">{{ doc }}</a></p>
+				<p><a href="{{ doc.get_absolute_url }}" class="static_a_display">{{ doc }}</a></p>
 			{% endfor %}	
 		</div>
 

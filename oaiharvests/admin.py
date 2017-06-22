@@ -1,6 +1,8 @@
 from django.contrib import admin
 
 from .models import Repository, Community, Collection, MetadataElement, Record
+from lltsite.models import StoryPage
+
 
 class RecordInlineElementsAdmin(admin.StackedInline):
     model = MetadataElement
@@ -46,6 +48,8 @@ class MetadataElementAdmin(admin.ModelAdmin):
     list_display = ('record', 'element_type', 'element_data',)
     list_filter = ('record',)
 
+
+admin.site.register(StoryPage)
 admin.site.register(Repository)
 admin.site.register(Community, CommunityAdmin)
 admin.site.register(Collection, CollectionAdmin)

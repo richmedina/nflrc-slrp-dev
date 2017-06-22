@@ -1,11 +1,14 @@
 import json, operator
+from collections import Counter
+
 from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView, ListView, DetailView
-from collections import Counter
 from django.db.models import Q
 
-from oaiharvests.models import Community, Collection, Record, MetadataElement
+from braces.views import LoginRequiredMixin
 
+from oaiharvests.models import Community, Collection, Record, MetadataElement
+from .models import StoryPage
 from .mixins import RecordSearchMixin
 
 
@@ -68,6 +71,23 @@ class ItemViewFull(DetailView):
         context = super(ItemViewFull, self).get_context_data(**kwargs)
         context['item_data'] = self.get_object().as_dict()
         return context
+
+
+class PageView(DetailView):
+    model = StoryPage
+    template_name = 'page_view.html'
+    context_object_name = 'page'
+
+    def get(self, request, *args, **kwargs):
+        if self.get_object().private:
+            return redirect('staff_page_view', item=self.get_object().id)
+        return super(PageView, self).get(request, *args, **kwargs)
+
+
+class PageViewPrivate(LoginRequiredMixin, DetailView):
+    model = StoryPage
+    template_name = 'page_view.html'
+    context_object_name = 'page'
 
 
 class LanguageView( ListView):
