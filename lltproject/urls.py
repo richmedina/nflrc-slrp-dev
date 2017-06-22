@@ -124,5 +124,5 @@ urlpatterns = [
        ), name='oai_harvest_collection'),
 
 
-   url(r'^admin/', include(admin.site.urls)),
+   url(r'^admin/', include(admin.site.urls), name='index'),
 ]
