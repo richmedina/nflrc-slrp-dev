@@ -153,7 +153,7 @@ class MetadataElement(models.Model):
         return u'%s:%s'%(self.element_type, self.element_data)
 
     def get_absolute_url(self):
-        pass  # return reverse('collection', args=[str(self.id)])
+        reverse('item', args=[self.record.id])
 
 
 class HarvestRegistration(TimeStampedModel):

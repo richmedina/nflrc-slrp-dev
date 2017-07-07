@@ -1,0 +1,3 @@
+{{ object.identifier }}
+{{ object.as_display_dict }}
+
