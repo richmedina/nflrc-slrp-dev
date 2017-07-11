@@ -67,7 +67,6 @@ class Collection(TimeStampedModel):
         toc = defaultdict(list)
         for i in self.list_records():
             d = i.as_dict()
-            print d
             for j in d['type']:
                 try:
                     authors = d['contributor.author']
