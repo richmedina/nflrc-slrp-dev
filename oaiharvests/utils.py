@@ -43,18 +43,25 @@ def dim_xml_to_dict(tree):
     return dict(fields)
 
 def get_bitstream_url(collection, record):
-    """ Harvests an href pointing to the bitstream url for the record in repository.
+    """ Harvests an href pointing to the bitstream urls for the record in repository.
     E.g., https://scholarspace.manoa.hawaii.edu/bitstream/10125/25006/1/editor.pdf
     """
+    bitstreams = {'bitstream': None, 'bitstream_txt': None}
     try:
         sickle = Sickle(collection.community.repository.base_url)        
         sickle.class_mapping['GetRecord'] = LltRecordBitstream
         record = sickle.GetRecord(metadataPrefix='ore', identifier=record.header.identifier)
-        return record.metadata['bitstream'][0].replace('+', '%20')
+        
+        record.metadata['bitstream'][0].replace('+', '%20')
+        bitstreams['bitstream'] = record.metadata['bitstream'][0]
+        record.metadata['bitstream_txt'][0].replace('+', '%20')
+        bitstreams['bitstream_txt'] = record.metadata['bitstream_txt'][0]
+
     
     except Exception as e:
         print e, 'Unable to construct bitstream url.'
-        return None
+    
+    return bitstreams
 
 def batch_harvest_articles(collection_obj):
     oai = OAIUtils()
@@ -88,10 +95,18 @@ def batch_harvest_articles(collection_obj):
                 element.element_data = json.dumps(data)
                 element.save()
 
+            #  Add in bitstream urls
+            bitstreams = get_bitstream_url(collection_obj, record)
             element = MetadataElement()
             element.record = record_obj
             element.element_type = 'bitstream'
-            element.element_data = json.dumps([get_bitstream_url(collection_obj, record)])
+            element.element_data = json.dumps([bitstreams['bitstream']])
+            element.save()
+
+            element = MetadataElement()
+            element.record = record_obj
+            element.element_type = 'bitstream_txt'
+            element.element_data = json.dumps([bitstreams['bitstream_txt']])
             element.save()
         else:
             try:
@@ -99,6 +114,7 @@ def batch_harvest_articles(collection_obj):
                 record_obj.delete()     
             except:
                 pass
+
 def batch_harvest_issues(community_obj):
     oai = OAIUtils()
     issues = oai.list_oai_collections(community_obj)
@@ -129,12 +145,31 @@ class LltRecordBitstream(Record):
     def __init__(self, record_element, strip_ns=True):
         super(LltRecordBitstream, self).__init__(record_element, strip_ns=strip_ns)
         self._oai_namespace = get_namespace(self.xml)
-        
+        rdfnamespace = '{http://www.w3.org/1999/02/22-rdf-syntax-ns#}'
+
         tree = self.xml.find('.//' + self._oai_namespace + 'metadata').getchildren()[0]
-        bitstream_urls = tree.findall('.//'+ '{http://www.w3.org/2005/Atom}'+'link')
+        bitstream_urls = tree.findall('.//'+rdfnamespace+'Description')
+
+        # for debugging in shell
+        self.bits = bitstream_urls
+        
+        #  clear the metadata. we're only interested in fishing out the bitstream info.
+        self.metadata.clear()
+        
         for i in bitstream_urls:
-            if i.get('rel') == 'http://www.openarchives.org/ore/terms/aggregates':
-                self.metadata = {'bitstream': [i.get('href')]}
+            bittype = i.find(rdfnamespace+'type').get(rdfnamespace+'resource')
+
+            if bittype != 'http://www.dspace.org/objectModel/DSpaceItem':
+                biturl = i.get(rdfnamespace+'about')
+                if biturl[-3:] == 'pdf':
+                    self.metadata['bitstream'] = [biturl]
+                else:
+                    self.metadata['bitstream_txt'] = [biturl]
+        
+        # for i in bitstream_urls:
+        #     print i
+        #     # if i.get('rel') == 'http://www.openarchives.org/ore/terms/aggregates':
+            #     self.metadata = {'bitstream': [i.get('href')]}
 
 
 class OAIUtils(object):
