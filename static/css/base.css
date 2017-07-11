@@ -17,12 +17,12 @@ body {
 .static_a_display:active {color: #666; text-decoration: none;}
 
 .border-space {
-  border-bottom: solid 1px gray;
+  border-bottom: solid 1px #ccc;
   /*margin-bottom: 8px;*/
 }
 
 dt.metadata {
-  border-bottom: solid 1px gray;
+  border-bottom: solid 1px #ccc;
   padding-top: 8px;
 }
 

@@ -10,7 +10,9 @@
 <!-- ROW 1 -->
 	<div class="row">
 		<div class="col-md-12 block-center">
-			<h2 class="text-center"></h2>
+			<span class="small">A refereed journal for second and foreign language scholars and educators.</span>
+			<h6>Edited by Dorothy Chun and Trude Heift</h6>
+			<h6>Impact Factor: 2.293 (2016 ISI Journal Citation Reports)</h6>
 		</div>
 	</div>
 
@@ -34,14 +36,29 @@
 					<div class="row">					
 						<div class="col-md-6">							
 							{% if volume.0.list_toc.Column %}<h4 class="border-space">Columns</h4>{% endif %}
-							{% for i in volume.0.list_toc.Column %}<p><a href="{{ i.get_absolute_url }}" class="static_a_display">{{ i }}</a></p>{% endfor %}
+							{% for i in volume.0.list_toc.Column %}
+								<a href="{{ i.0.get_absolute_url }}" class="static_a_display">
+									<strong> {{ i.0 }} </strong>
+									<p class="small">{% for j in i.1%} <em>{{ j }}{% if not forloop.last %}; {% endif %}</em> {% endfor %}</p>
+								</a>
+							{% endfor %}
 							
 							{% if volume.0.list_toc.Review %}<h4 class="border-space">Reviews</h4>{% endif %}
-							{% for i in volume.0.list_toc.Review %}<p><a href="{{ i.get_absolute_url }}" class="static_a_display">{{ i }}</a></p>{% endfor %}
+							{% for i in volume.0.list_toc.Review %}
+								<a href="{{ i.0.get_absolute_url }}" class="static_a_display">
+									<strong> {{ i.0 }} </strong>
+									<p class="small">{% for j in i.1%} <em>{{ j }}{% if not forloop.last %}; {% endif %}</em> {% endfor %}</p>
+								</a>
+							{% endfor %}
 						</div>
 						<div class="col-md-6">
 							{% if volume.0.list_toc.Article %}<h4 class="border-space">Articles</h4>{% endif %}
-							{% for i in volume.0.list_toc.Article %}<p><a href="{{ i.get_absolute_url }}" class="static_a_display">{{ i }}</a></p>{% endfor %}
+							{% for i in volume.0.list_toc.Article %}
+								<a href="{{ i.0.get_absolute_url }}" class="static_a_display">
+									<strong> {{ i.0 }} </strong>
+									<p class="small">{% for j in i.1%} <em>{{ j }}{% if not forloop.last %}; {% endif %}</em> {% endfor %}</p>
+								</a>
+							{% endfor %}
 						</div>		
 					</div>
 				</li>
@@ -52,7 +69,23 @@
 		</div>
 		<div class="col-md-3">
 			<div class="row">
-				<div class="col-md-12"><p><em>side bar content here...</em></p></div>
+				<div class="col-md-12">		            
+					<ul class="list-unstyled">
+						<li><a href="#" class="btn btn-md btn-link static_a_display">Submit a Manuscript</a></li>
+						<li><a href="#" class="btn btn-md btn-link static_a_display">Research Guidelines</a></li>
+						<li><a href="#" class="btn btn-md btn-link static_a_display">Submission Guidelines</a></li>
+						<li><a href="#" class="btn btn-md btn-link static_a_display">Permissions</a></li>
+						<li><a href="#" class="btn btn-md btn-link static_a_display">Recent CALL PhD</a></li>
+						<li><a href="#" class="btn btn-md btn-link static_a_display">Dissertations</a></li>
+						<li><a href="#" class="btn btn-md btn-link static_a_display">Annual Reports</a></li>
+					</ul>
+				</div>
+				<div class="col-md-12">
+					<ul class="list-unstyled">
+		                <li class="gray"><a href="#" class="btn btn-lg btn-link static_a_display">donate</a></li>
+		                <li class="gray"><a href="#" class="btn btn-lg btn-link static_a_display">subscribe</a></li>
+		            </ul>
+				</div>
 			</div>
 		</div>
 	

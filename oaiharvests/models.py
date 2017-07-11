@@ -67,8 +67,17 @@ class Collection(TimeStampedModel):
         toc = defaultdict(list)
         for i in self.list_records():
             d = i.as_dict()
+            print d
             for j in d['type']:
-                toc[j].append(i)
+                try:
+                    authors = d['contributor.author']
+                    authors = [k.split(',')[1] + ' ' + k.split(',')[0] for k in authors]
+                    try:
+                        toc[j].append((i, authors, d['description.abstract']))
+                    except KeyError:
+                        toc[j].append((i, authors, ''))
+                except KeyError:
+                    toc[j].append((i, ''))
         return toc
 
     def get_absolute_url(self):

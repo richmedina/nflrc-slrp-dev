@@ -60,6 +60,8 @@ class ItemView(DetailView):
     def get_context_data(self, **kwargs):
         context = super(ItemView, self).get_context_data(**kwargs)
         context['item_data'] = self.get_object().as_display_dict()
+        bitstream = context['item_data']['bitstream'][0]
+        context['pdf_filename'] = bitstream[bitstream.rfind('/')+1:]
         return context
 
 

@@ -15,17 +15,27 @@
 		<div class="col-md-6">
 			{% if toc.Column %}<h4 class="border-space">Columns</h4>{% endif %}
 			{% for doc in toc.Column %} 
-				<p><a href="{{ doc.get_absolute_url }}" class="static_a_display">{{ doc }}</a></p>
+				<a href="{{ doc.0.get_absolute_url }}" class="static_a_display">
+					<strong>{{ doc.0 }}</strong>
+					<p class="small">{% for j in doc.1%} <em>{{ j }}{% if not forloop.last %}; {% endif %}</em> {% endfor %}</p>
+				</a>
 			{% endfor %}
 			{% if toc.Review %}<h4 class="border-space">Reviews</h4>{% endif %}
 			{% for doc in toc.Review %} 
-				<p><a href="{{ doc.get_absolute_url }}" class="static_a_display">{{ doc }}</a></p>
+				<a href="{{ doc.0.get_absolute_url }}" class="static_a_display">
+					<strong>{{ doc.0 }}</strong>
+					<p class="small">{% for j in doc.1%} <em>{{ j }}{% if not forloop.last %}; {% endif %}</em> {% endfor %}</p>
+				</a>
 			{% endfor %}
 		</div>
 		<div class="col-md-6">
 			{% if toc.Article %}<h4 class="border-space">Articles</h4>{% endif %}
 			{% for doc in toc.Article %} 
-				<p><a href="{{ doc.get_absolute_url }}" class="static_a_display">{{ doc }}</a></p>
+				<a href="{{ doc.0.get_absolute_url }}" class="static_a_display">
+					<strong>{{ doc.0 }}</strong>
+					<p class="small">{% for j in doc.1%} <em>{{ j }}{% if not forloop.last %}; {% endif %}</em> {% endfor %}</p>
+					<p class="small">{{ doc.2.0 }} </p>
+				</a>
 			{% endfor %}	
 		</div>
 
