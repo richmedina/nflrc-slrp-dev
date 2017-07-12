@@ -9,22 +9,20 @@
 	
 <!-- ROW 1 -->
 	<div class="row">
-		<div class="col-md-12 block-center">
-			<span class="small">A refereed journal for second and foreign language scholars and educators.</span>
-			<h6>Edited by Dorothy Chun and Trude Heift</h6>
-			<h6>Impact Factor: 2.293 (2016 ISI Journal Citation Reports)</h6>
+		<div class="col-md-12">
+			<div class="btn btn-lg btn-white"><a href="{% url 'page_view' 13 %}">Announcements</div>
 		</div>
 	</div>
 
 <!-- ROW 2 -->
 	<div class="row">
 	
-		<div class="col-md-9">
+		<div class="col-md-10">
 		{% for volume in volumes %}
 			<ul class="list-unstyled">
 				<li>
 					{% if forloop.first %}
-						<sup><span class="badge">latest</span></sup> <a href="{% url 'collection' volume.0.identifier %}" class="btn btn-lg btn-link static_a_display">{{ volume.0.name }}</a>
+						<a href="{% url 'collection' volume.0.identifier %}" class="btn btn-lg btn-link static_a_display"><h2>{{ volume.0.name }}</h2></a><sup><span class="badge">newest</span></sup>
 					{% else %}
 						<a href="{% url 'collection' volume.0.identifier %}" class="btn btn-md btn-link static_a_display">{{ volume.0.name }}</a>
 					{% endif %}
@@ -32,29 +30,29 @@
 				</li>
 				
 				{% if forloop.first %}
-				<li>					
+				<li class="well bg-llt-yellow">					
 					<div class="row">					
 						<div class="col-md-6">							
-							{% if volume.0.list_toc.Column %}<h4 class="border-space">Columns</h4>{% endif %}
+							{% if volume.0.list_toc.Column %}<h4 class="border-space llt-burgundy">Columns</h4>{% endif %}
 							{% for i in volume.0.list_toc.Column %}
-								<a href="{{ i.0.get_absolute_url }}" class="static_a_display">
+								<a href="{{ i.0.get_absolute_url }}" class="llt-burgundy">
 									<strong> {{ i.0 }} </strong>
 									<p class="small">{% for j in i.1%} <em>{{ j }}{% if not forloop.last %}; {% endif %}</em> {% endfor %}</p>
 								</a>
 							{% endfor %}
 							
-							{% if volume.0.list_toc.Review %}<h4 class="border-space">Reviews</h4>{% endif %}
+							{% if volume.0.list_toc.Review %}<h4 class="border-space llt-burgundy">Reviews</h4>{% endif %}
 							{% for i in volume.0.list_toc.Review %}
-								<a href="{{ i.0.get_absolute_url }}" class="static_a_display">
+								<a href="{{ i.0.get_absolute_url }}" class="llt-burgundy">
 									<strong> {{ i.0 }} </strong>
 									<p class="small">{% for j in i.1%} <em>{{ j }}{% if not forloop.last %}; {% endif %}</em> {% endfor %}</p>
 								</a>
 							{% endfor %}
 						</div>
 						<div class="col-md-6">
-							{% if volume.0.list_toc.Article %}<h4 class="border-space">Articles</h4>{% endif %}
+							{% if volume.0.list_toc.Article %}<h4 class="border-space llt-burgundy">Articles</h4>{% endif %}
 							{% for i in volume.0.list_toc.Article %}
-								<a href="{{ i.0.get_absolute_url }}" class="static_a_display">
+								<a href="{{ i.0.get_absolute_url }}" class="llt-burgundy">
 									<strong> {{ i.0 }} </strong>
 									<p class="small">{% for j in i.1%} <em>{{ j }}{% if not forloop.last %}; {% endif %}</em> {% endfor %}</p>
 								</a>
@@ -67,9 +65,19 @@
 			</ul>
 			{% endfor %}
 		</div>
-		<div class="col-md-3">
+		<div class="col-md-2">
+			<h2></h2>
 			<div class="row">
-				<div class="col-md-12">		            
+				<div class="col-md-12">
+					<div class="well text-center bg-llt-burgundy">
+						<p style="font-size: 5.0em">2.293</p>
+						<p style="font-size: .8em; margin-bottom: -20px">Impact Factor (2016 ISI Journal Citation Reports)</p>
+						<p></p>
+					</div>		            
+				<div class="col-md-12 text-center">					
+		                <p><a href="{% url 'page_view' 11 %}" class="btn btn-lg btn-block bg-llt-yellow">Donate</a></p>
+		                <p><a href="{% url 'page_view' 12 %}" class="btn btn-lg btn-block bg-llt-burgundy">Subscribe</a></p>
+				</div>
 					<ul class="list-unstyled">
 						<li><a href="{% url 'page_view' 4 %}" class="btn btn-md btn-link static_a_display">Submit a Manuscript</a></li>
 						<li><a href="{% url 'page_view' 5 %}" class="btn btn-md btn-link static_a_display">Research Guidelines</a></li>
@@ -80,12 +88,7 @@
 						<li><a href="{% url 'page_view' 10 %}" class="btn btn-md btn-link static_a_display">Annual Reports</a></li>
 					</ul>
 				</div>
-				<div class="col-md-12">
-					<ul class="list-unstyled">
-		                <li class="gray"><a href="{% url 'page_view' 11 %}" class="btn btn-lg btn-link static_a_display">donate</a></li>
-		                <li class="gray"><a href="{% url 'page_view' 12 %}" class="btn btn-lg btn-link static_a_display">subscribe</a></li>
-		            </ul>
-				</div>
+
 			</div>
 		</div>
 	
