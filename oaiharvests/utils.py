@@ -42,24 +42,25 @@ def dim_xml_to_dict(tree):
         fields[f].append(tag.text)    
     return dict(fields)
 
-def get_bitstream_url(collection, record):
+def get_bitstream_url(collection, record_in):
     """ Harvests an href pointing to the bitstream urls for the record in repository.
     E.g., https://scholarspace.manoa.hawaii.edu/bitstream/10125/25006/1/editor.pdf
     """
-    bitstreams = {'bitstream': None, 'bitstream_txt': None}
-    try:
-        sickle = Sickle(collection.community.repository.base_url)        
-        sickle.class_mapping['GetRecord'] = LltRecordBitstream
-        record = sickle.GetRecord(metadataPrefix='ore', identifier=record.header.identifier)
-        
-        record.metadata['bitstream'][0].replace('+', '%20')
-        bitstreams['bitstream'] = record.metadata['bitstream'][0]
-        record.metadata['bitstream_txt'][0].replace('+', '%20')
-        bitstreams['bitstream_txt'] = record.metadata['bitstream_txt'][0]
 
-    
+    sickle = Sickle(collection.community.repository.base_url)        
+    sickle.class_mapping['GetRecord'] = LltRecordBitstream
+    record = sickle.GetRecord(metadataPrefix='ore', identifier=record_in.header.identifier)
+    bitstreams = {'bitstream': None, 'bitstream_txt': None}
+
+    try:        
+        bitstreams['bitstream'] = record.metadata['bitstream'][0].replace('+', '%20')
     except Exception as e:
-        print e, 'Unable to construct bitstream url.'
+        print e, 'Unable to construct bitstream url for', record_in.header.identifier
+
+    try:
+        bitstreams['bitstream_txt'] = record.metadata['bitstream_txt'][0].replace('+', '%20')
+    except Exception as e:
+        print e, 'Unable to construct bitstream_txt url for', record_in.header.identifier
     
     return bitstreams
 
@@ -77,7 +78,6 @@ def batch_harvest_articles(collection_obj):
                 record_obj.hdr_datestamp = repo_date
 
             except Exception as e:
-                print 'Creating new Record object.', record.header.identifier
                 record_obj = LocalRecord()
                 record_obj.identifier = record.header.identifier
                 record_obj.hdr_datestamp = repo_date
@@ -123,7 +123,7 @@ def batch_harvest_issues(community_obj):
         try:
             col.save()
         except Exception as e:
-            print 'collection already added to db', e
+            # collection already added to db
             col = Collection.objects.get(identifier=i[0])
         
         batch_harvest_articles(col)
@@ -134,7 +134,6 @@ class LltRecord(Record):
     def __init__(self, record_element, strip_ns=True):
         super(LltRecord, self).__init__(record_element, strip_ns=strip_ns)
         self.header = Header(self.xml.find('.//' + self._oai_namespace + 'header'))
-        print self.header.identifier, self.header.deleted
         if not self.header.deleted:
             tree = self.xml.find('.//' + self._oai_namespace + 'metadata').getchildren()[0]
             self.metadata = dim_xml_to_dict(tree)

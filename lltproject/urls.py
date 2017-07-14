@@ -28,6 +28,7 @@ from oaiharvests.views import (
     OaiCommunityCreateView,
     OaiCommunityUpdateView,
     OaiCommunityDeleteView,
+    OaiCommunityHarvestView,
     OaiCollectionView,
     OaiCollectionCreateView,
     OaiCollectionUpdateView,
@@ -107,6 +108,9 @@ urlpatterns = [
     url(r'^oaiharvester/community/delete/(?P<pk>\w+)$',
      OaiCommunityDeleteView.as_view(
      ), name='oai_community_delete'),
+    url(r'^oaiharvester/collection/harvest/(?P<pk>\w+)$',
+     OaiCommunityHarvestView.as_view(
+     ), name='oai_harvest_community'),
 
     # Collections #
     url(r'^oaiharvester/collection/(?P<pk>\w+)$',

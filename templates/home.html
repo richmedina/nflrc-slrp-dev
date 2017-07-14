@@ -3,14 +3,22 @@
 {% load staticfiles %}
 
 
-{% block submenu %}{{ block.super }}{% endblock submenu %}
+{% block page_header %}
+	<div class="row">
+		<div class="col-md-10">
+			<h5>Dorothy Chun and Trude Heift, Editors</h5>
+			<p class="small">Supported by the Center for Language & Technology and the National Foreign Language Resource Center (NFLRC) at the University of Hawaii, and the Center for Language & Education Research at Michigan State University</p>	
+		</div>
+	</div>
+	
+{% endblock page_header %}
 
 {% block content %}
 	
 <!-- ROW 1 -->
 	<div class="row">
 		<div class="col-md-12">
-			<div class="btn btn-lg btn-white"><a href="{% url 'page_view' 13 %}">Announcements</div>
+			
 		</div>
 	</div>
 
@@ -19,40 +27,36 @@
 	
 		<div class="col-md-10">
 		{% for volume in volumes %}
-			<ul class="list-unstyled">
-				<li>
-					{% if forloop.first %}
-						<a href="{% url 'collection' volume.0.identifier %}" class="btn btn-lg btn-link static_a_display"><h2>{{ volume.0.name }}</h2></a><sup><span class="badge">newest</span></sup>
-					{% else %}
-						<a href="{% url 'collection' volume.0.identifier %}" class="btn btn-md btn-link static_a_display">{{ volume.0.name }}</a>
-					{% endif %}
-					</h3>
-				</li>
-				
+			<ul class="list-unstyled">				
 				{% if forloop.first %}
-				<li class="well bg-llt-yellow">					
-					<div class="row">					
+				<li class=" bg-llt-white">					
+					<div class="row">	
+						<div class="col-md-12">
+							<h3><a href="{% url 'collection' volume.0.identifier %}" class="static_a_display">{{ volume.0.name }} <sup><span class="badge">newest</span></sup></a></h3>
+						</div>				
+						
 						<div class="col-md-6">							
-							{% if volume.0.list_toc.Column %}<h4 class="border-space llt-burgundy">Columns</h4>{% endif %}
+							{% if volume.0.list_toc.Column %}<h4 class="border-space">Columns</h4>{% endif %}
 							{% for i in volume.0.list_toc.Column %}
-								<a href="{{ i.0.get_absolute_url }}" class="llt-burgundy">
+								<a href="{{ i.0.get_absolute_url }}" class="static_a_display">
 									<strong> {{ i.0 }} </strong>
 									<p class="small">{% for j in i.1%} <em>{{ j }}{% if not forloop.last %}; {% endif %}</em> {% endfor %}</p>
 								</a>
 							{% endfor %}
 							
-							{% if volume.0.list_toc.Review %}<h4 class="border-space llt-burgundy">Reviews</h4>{% endif %}
+							{% if volume.0.list_toc.Review %}<h4 class="border-space">Reviews</h4>{% endif %}
 							{% for i in volume.0.list_toc.Review %}
-								<a href="{{ i.0.get_absolute_url }}" class="llt-burgundy">
+								<a href="{{ i.0.get_absolute_url }}" class="static_a_display">
 									<strong> {{ i.0 }} </strong>
 									<p class="small">{% for j in i.1%} <em>{{ j }}{% if not forloop.last %}; {% endif %}</em> {% endfor %}</p>
 								</a>
 							{% endfor %}
 						</div>
+						
 						<div class="col-md-6">
-							{% if volume.0.list_toc.Article %}<h4 class="border-space llt-burgundy">Articles</h4>{% endif %}
+							{% if volume.0.list_toc.Article %}<h4 class="border-space">Articles</h4>{% endif %}
 							{% for i in volume.0.list_toc.Article %}
-								<a href="{{ i.0.get_absolute_url }}" class="llt-burgundy">
+								<a href="{{ i.0.get_absolute_url }}" class="static_a_display">
 									<strong> {{ i.0 }} </strong>
 									<p class="small">{% for j in i.1%} <em>{{ j }}{% if not forloop.last %}; {% endif %}</em> {% endfor %}</p>
 								</a>
@@ -60,24 +64,24 @@
 						</div>		
 					</div>
 				</li>
+				{% else %}
+				<li><a href="{% url 'collection' volume.0.identifier %}" class="btn btn-md btn-link static_a_display">{{ volume.0.name }}</a></li>
 				{% endif %}
-
 			</ul>
 			{% endfor %}
 		</div>
 		<div class="col-md-2">
-			<h2></h2>
 			<div class="row">
 				<div class="col-md-12">
-					<div class="well text-center bg-llt-burgundy">
-						<p style="font-size: 5.0em">2.293</p>
-						<p style="font-size: .8em; margin-bottom: -20px">Impact Factor (2016 ISI Journal Citation Reports)</p>
-						<p></p>
-					</div>		            
-				<div class="col-md-12 text-center">					
-		                <p><a href="{% url 'page_view' 11 %}" class="btn btn-lg btn-block bg-llt-yellow">Donate</a></p>
-		                <p><a href="{% url 'page_view' 12 %}" class="btn btn-lg btn-block bg-llt-burgundy">Subscribe</a></p>
-				</div>
+					<p><a href="{% url 'page_view' 13 %}" class="btn btn-lg btn-block bg-llt-gray">Announcements</a></p>
+					<div class="well text-center bg-llt-gray">
+						<p style="font-size: 2.5em">2.293</p>
+						<p style="font-size: 0.8em">Impact Factor </p>
+						<p style="font-size: 0.6em">(2016 ISI Journal Citation Reports)</p>
+					</div>		            					
+		            <p><a href="{% url 'page_view' 11 %}" class="btn btn-lg btn-block bg-llt-gray">Donate</a></p>
+		            <p><a href="{% url 'page_view' 12 %}" class="btn btn-lg btn-block bg-llt-gray">Subscribe</a></p>
+
 					<ul class="list-unstyled">
 						<li><a href="{% url 'page_view' 4 %}" class="btn btn-md btn-link static_a_display">Submit a Manuscript</a></li>
 						<li><a href="{% url 'page_view' 5 %}" class="btn btn-md btn-link static_a_display">Research Guidelines</a></li>

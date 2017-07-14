@@ -5,7 +5,7 @@ body {
   height: 100%;
   background: #fff !important;
   padding: 15px;
-  padding-top: 150px;
+  padding-top: 100px;
   padding-bottom: 50px;
   font-family: 'Open Sans', sans-serif;
   font-weight: 400;
@@ -27,9 +27,9 @@ dt.metadata {
 }
 
 .navbar-fixed-top {
-  background: #fff;
-  height: 140px;
-  border-bottom: 1px solid black ;
+  background-color: #fff;
+  height: 100px;
+  border-bottom: 0px solid black ;
 }
 
 .navbar-fixed-bottom {
@@ -38,7 +38,9 @@ dt.metadata {
 
 /******************************** Colors *******************************************************/
 
-.bg-llt-yellow { background: #ffe396; color: #7d0000;}
+.bg-llt-gray { background: #eeeeee; color: #666;}
+.bg-llt-white { background: #fff; color: #666;}
+
 .bg-llt-burgundy { background: #7d0000; color: #fff; }
 .llt-burgundy {color: #7d0000; border-color: #7d0000;}
 

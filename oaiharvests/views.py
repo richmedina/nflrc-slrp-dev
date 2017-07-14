@@ -18,7 +18,7 @@ from oaipmh.metadata import MetadataRegistry, oai_dc_reader
 
 from .models import Repository, Community, Collection, MetadataElement, Record
 from .forms import CreateRepositoryForm, CreateCommunityForm, CreateCollectionForm
-from .utils import OAIUtils, get_bitstream_url, filter_existing_collections
+from .utils import OAIUtils, get_bitstream_url, filter_existing_collections, batch_harvest_issues, batch_harvest_articles
 
 class OaiRepositoryListView(ListView):
     model = Repository
@@ -80,7 +80,6 @@ class OaiCommunityCreateView(DetailView):
     oai = OAIUtils()
 
     def post(self, request, **kwargs):
-        print 'post->'
         form = CreateCommunityForm(request.POST, repo=self.get_object(), community_list=self.oai.communities)
 
         if form.is_valid():
@@ -126,6 +125,18 @@ class OaiCommunityDeleteView(DeleteView):
         context['view_type'] = 'delete community collection'
         return context
 
+
+class OaiCommunityHarvestView(DetailView):
+    model = Community
+    template_name = 'oai_community_detail.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super(OaiCommunityHarvestView, self).get_context_data(**kwargs)
+        oai = OAIUtils()
+        community = self.get_object()
+        batch_harvest_issues(community)
+        context['collections'] = community.list_collections()
+        return context
 
 class OaiCollectionView(DetailView):
     model = Collection
@@ -212,41 +223,58 @@ class OaiCollectionHarvestView(DetailView):
             OaiCollectionHarvestView, self).get_context_data(**kwargs)
         oai = OAIUtils()
         collection = self.get_object()
-        repository = collection.community.repository
-        records = oai.harvest_oai_collection_records_sickle(collection)
+        batch_harvest_articles(collection)
+        # repository = collection.community.repository
+        # records = oai.harvest_oai_collection_records_sickle(collection)
 
-        for record in records:
-            # Read Header
-            repo_date = dateparse.parse_datetime(record.header.datestamp)
-            try:
-                record_obj = Record.objects.get(identifier=record.header.identifier)            
-                record_obj.remove_data()
-                record_obj.hdr_datestamp = repo_date
+        # for record in records:
+        #     # Read Header
+        #     repo_date = dateparse.parse_datetime(record.header.datestamp)
+        #     try:
+        #         record_obj = Record.objects.get(identifier=record.header.identifier)            
+        #         record_obj.remove_data()
+        #         record_obj.hdr_datestamp = repo_date
 
-            except:
-                record_obj = Record()
-                record_obj.identifier = record.header.identifier
-                record_obj.hdr_datestamp = repo_date
-                record_obj.hdr_setSpec = collection
+        #     except:
+        #         record_obj = Record()
+        #         record_obj.identifier = record.header.identifier
+        #         record_obj.hdr_datestamp = repo_date
+        #         record_obj.hdr_setSpec = collection
             
-            record_obj.save()
+        #     record_obj.save()
 
-            # Read Metadata
-            dataelements = record.metadata
-            print type(dataelements)
-            for key in dataelements:
-                element = MetadataElement()
-                element.record = record_obj
-                element.element_type = key
-                data = dataelements[key]
-                element.element_data = json.dumps(data)
-                element.save()
+        #     # Read Metadata
+        #     dataelements = record.metadata
+        #     for key in dataelements:
+        #         element = MetadataElement()
+        #         element.record = record_obj
+        #         element.element_type = key
+        #         data = dataelements[key]
+        #         element.element_data = json.dumps(data)
+        #         element.save()
 
-            element = MetadataElement()
-            element.record = record_obj
-            element.element_type = 'bitstream'
-            element.element_data = json.dumps([get_bitstream_url(collection, record)])
-            element.save()
+        #     #  Add in bitstream urls
+        #     bitstreams = get_bitstream_url(collection, record)
+        #     element = MetadataElement()
+        #     element.record = record_obj
+        #     element.element_type = 'bitstream'
+        #     element.element_data = json.dumps([bitstreams['bitstream']])
+        #     element.save()
+
+        #     element = MetadataElement()
+        #     element.record = record_obj
+        #     element.element_type = 'bitstream_txt'
+        #     element.element_data = json.dumps([bitstreams['bitstream_txt']])
+        #     element.save()
+
+
+
+        #     # old bitstream retrieval
+        #     # element = MetadataElement()
+        #     # element.record = record_obj
+        #     # element.element_type = 'bitstream'
+        #     # element.element_data = json.dumps([get_bitstream_url(collection, record)])
+        #     # element.save()
 
         context['records'] = self.get_object().record_set.all()
         context['num_records'] = self.get_object().count_records()
