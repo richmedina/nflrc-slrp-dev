@@ -9,9 +9,9 @@ import pdb #pdb.set_trace()
 
 """Metadata element dispay sets"""
 
-TYPES = ['publisher', 'description.provenance', 'identifier.doi', 'title', 'bitstream', 'date.available', 'type.dcmi', 'relation.uri', 'identifier.citation', 'format.extent', 'description.abstract', 'date.accessioned', 'language.iso', 'relation.ispartofseries', 'identifier.issn', 'date.issued', 'identifier.uri', 'type', 'contributor.author', 'subject',]
+TYPES = ['publisher', 'description.provenance', 'identifier.doi', 'title', 'bitstream', 'date.available', 'type.dcmi', 'relation.uri', 'identifier.citation', 'format.extent', 'description.abstract', 'date.accessioned', 'language.iso', 'relation.ispartofseries', 'identifier.issn', 'date.issued', 'identifier.uri', 'type', 'contributor.author', 'subject', 'volume']
 
-DISPLAY_TYPE_ORDER = ['title', 'contributor.author', 'description.abstract', 'bitstream', 'bitstream_txt', 'subject', 'publisher', 'type', 'relation.ispartofseries', 'date.issued', 'identifier.doi', 'identifier.uri', 'identifier.citation',]
+DISPLAY_TYPE_ORDER = ['title', 'contributor.author', 'description.abstract', 'bitstream', 'bitstream_txt', 'subject', 'publisher', 'type', 'relation.ispartofseries', 'date.issued', 'identifier.doi', 'identifier.uri', 'identifier.citation', 'volume']
 
 
 class Repository(TimeStampedModel):
@@ -39,8 +39,13 @@ class Community(TimeStampedModel):
     name = models.CharField(max_length=256, blank=True, default=None)
     repository = models.ForeignKey(Repository)
 
+    
     def list_collections(self):
-        return self.collection_set.all()
+        return self.collection_set.all().order_by('-name')
+
+    def list_collections_by_volume(self):
+        # TODO: return collections grouped by volume number.
+        pass
 
     def __unicode__(self):
         return self.name
@@ -63,6 +68,13 @@ class Collection(TimeStampedModel):
     def list_records(self):
         return self.record_set.all()
 
+    def list_records_by_page(self):
+        records = []
+        for i in self.record_set.all():
+            records.append((i, i.get_metadata_item('startingpage')))
+        return sorted(record_set, key=lambda rec: rec[1])
+
+
     def list_toc(self):
         toc = defaultdict(list)
         for i in self.list_records():
@@ -75,8 +87,8 @@ class Collection(TimeStampedModel):
                         toc[j].append((i, authors, d['description.abstract']))
                     except KeyError:
                         toc[j].append((i, authors, ''))
-                except KeyError:
-                    toc[j].append((i, ''))
+                except:
+                    toc[j].append((i, '', ''))
         return toc
 
     def get_absolute_url(self):
