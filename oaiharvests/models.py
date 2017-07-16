@@ -9,9 +9,9 @@ import pdb #pdb.set_trace()
 
 """Metadata element dispay sets"""
 
-TYPES = ['publisher', 'description.provenance', 'identifier.doi', 'title', 'bitstream', 'date.available', 'type.dcmi', 'relation.uri', 'identifier.citation', 'format.extent', 'description.abstract', 'date.accessioned', 'language.iso', 'relation.ispartofseries', 'identifier.issn', 'date.issued', 'identifier.uri', 'type', 'contributor.author', 'subject', 'volume']
+TYPES = ['publisher', 'description.provenance', 'identifier.doi', 'title', 'bitstream', 'date.available', 'type.dcmi', 'relation.uri', 'identifier.citation', 'format.extent', 'description.abstract', 'date.accessioned', 'language.iso', 'relation.ispartofseries', 'identifier.issn', 'date.issued', 'identifier.uri', 'type', 'contributor.author', 'subject', 'volume', 'startingpage']
 
-DISPLAY_TYPE_ORDER = ['title', 'contributor.author', 'description.abstract', 'bitstream', 'bitstream_txt', 'subject', 'publisher', 'type', 'relation.ispartofseries', 'date.issued', 'identifier.doi', 'identifier.uri', 'identifier.citation', 'volume']
+DISPLAY_TYPE_ORDER = ['title', 'contributor.author', 'description.abstract', 'bitstream', 'bitstream_txt', 'subject', 'publisher', 'type', 'relation.ispartofseries', 'date.issued', 'identifier.doi', 'identifier.uri', 'identifier.citation', 'volume', 'startingpage']
 
 
 class Repository(TimeStampedModel):
@@ -33,7 +33,7 @@ class Repository(TimeStampedModel):
 
 class Community(TimeStampedModel):
 
-    """A hierarchical organization of sets -- e.g., Kaipuleohone is a community collection"""
+    """A hierarchical organization of sets -- e.g., Language Learning & Technology is a community collection"""
 
     identifier = models.CharField(primary_key=True, max_length=256)
     name = models.CharField(max_length=256, blank=True, default=None)
@@ -45,7 +45,32 @@ class Community(TimeStampedModel):
 
     def list_collections_by_volume(self):
         # TODO: return collections grouped by volume number.
-        pass
+        volumes_group = OrderedDict()
+        volumes = self.collection_set.all().order_by('name')
+        for i in volumes:
+            # get a record from the volume
+            rec = i.list_records()[0]
+            
+            # get volume number from record
+            try:
+                # print '===>', rec, rec[2]
+                vol_num = int(rec.get_metadata_item('volume')[0][0])
+            except Exception as e:
+                vol_num = 0
+
+            # add volume num as dict key
+            if vol_num in volumes_group:
+                volumes_group[vol_num].append(i)
+            else:
+                volumes_group[vol_num] = [i]
+
+        return volumes_group
+
+    def aggregate_keywords(self):
+        keywords = []
+        for i in MetadataElement.objects.all().filter(element_type='subject'):
+            keywords.extend(json.loads(i.element_data))
+        return sorted(keywords)
 
     def __unicode__(self):
         return self.name
@@ -68,12 +93,25 @@ class Collection(TimeStampedModel):
     def list_records(self):
         return self.record_set.all()
 
-    def list_records_by_page(self):
+    def list_records_by_page_and_volume(self):
         records = []
         for i in self.record_set.all():
-            records.append((i, i.get_metadata_item('startingpage')))
-        return sorted(record_set, key=lambda rec: rec[1])
+            record_data = i.as_display_dict()
+            t = [i]
+            
+            try:
+                t.append(record_data['startingpage'][0])
+            except Exception as e:
+                t.append('0')
+            
+            try:
+                t.append(record_data['volume'][0])
+            except Exception as e:
+                t.append('0')
 
+            records.append(t)
+
+        return sorted(records, key=lambda rec: rec[1])
 
     def list_toc(self):
         toc = defaultdict(list)
@@ -109,7 +147,11 @@ class Record(TimeStampedModel):
         return
 
     def get_metadata_item(self, e_type):
-        return self.data.filter(element_type=e_type)
+        data = []
+        elements = self.data.filter(element_type=e_type)
+        for e in elements:
+            data.append(json.loads(e.element_data))
+        return data
 
     def metadata_items(self):
         return self.data.all()
@@ -154,8 +196,14 @@ class Record(TimeStampedModel):
                 pass
         return display_dict
 
+    def get_keyword_list(self):
+        try:
+            return rec.get_metadata_item('subject')[0][0]
+        except:
+            return []
+
     def __unicode__(self):
-        title = json.loads(self.get_metadata_item('title')[0].element_data)[0]
+        title = self.get_metadata_item('title')[0][0]
         return '%s'%(title)
 
     def get_absolute_url(self):

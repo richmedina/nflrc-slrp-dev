@@ -18,7 +18,10 @@ class HomeView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(HomeView, self).get_context_data(**kwargs)
-        context['volumes'] = [(vol, vol.list_records()) for vol in Collection.objects.all().order_by('-name')]
+        journal = Community.objects.all()[0]
+        context['keywords'] =  journal.aggregate_keywords()
+        context['volumes'] = journal.list_collections_by_volume()
+        context['latest'] = [(vol, vol.list_records()) for vol in Collection.objects.all().order_by('-name')][0]
         return context
 
 

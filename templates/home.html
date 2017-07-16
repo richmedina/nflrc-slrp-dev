@@ -5,7 +5,7 @@
 
 {% block page_header %}
 <div class="row">
-	<div class="col-md-10">
+	<div class="col-md-9">
 		<h5>Dorothy Chun and Trude Heift, Editors</h5>
 		<p class="small">Supported by the Center for Language & Technology and the National Foreign Language Resource Center (NFLRC) at the University of Hawaii, and the Center for Language & Education Research at Michigan State University</p>	
 	</div>
@@ -18,22 +18,22 @@
 <div class="row">
 	<!-- LEFT PANEL -->
 	<div class="col-md-9">
-		<div class="row">	
+		<div class="row">
 			<div class="col-md-12">
-				<h3><a href="{% url 'collection' volumes.0.0.identifier %}" class="static_a_display">{{ volumes.0.0.name }} <sup><span class="badge">newest</span></sup></a></h3>
+				<h3><a href="{% url 'collection' latest.0.identifier %}" class="static_a_display">{{ latest.0.name }} <sup><span class="badge">newest</span></sup></a></h3>
 			</div>				
 			
 			<div class="col-md-6">						
-				{% if volumes.0.0.list_toc.Column %}<h4 class="border-space">Columns</h4>{% endif %}
-				{% for i in volumes.0.0.list_toc.Column %}
+				{% if latest.0.list_toc.Column %}<h4 class="border-space">Columns</h4>{% endif %}
+				{% for i in latest.0.list_toc.Column %}
 					<a href="{{ i.0.get_absolute_url }}" class="static_a_display">
 						<strong> {{ i.0 }} </strong>
 						<p class="small">{% for j in i.1%} <em>{{ j }}{% if not forloop.last %}; {% endif %}</em> {% endfor %}</p>
 					</a>
 				{% endfor %}
 				
-				{% if volumes.0.0.list_toc.Review %}<h4 class="border-space">Reviews</h4>{% endif %}
-				{% for i in volumes.0.0.list_toc.Review %}
+				{% if latest.0.list_toc.Review %}<h4 class="border-space">Reviews</h4>{% endif %}
+				{% for i in latest.0.list_toc.Review %}
 					<a href="{{ i.0.get_absolute_url }}" class="static_a_display">
 						<strong> {{ i.0 }} </strong>
 						<p class="small">{% for j in i.1%} <em>{{ j }}{% if not forloop.last %}; {% endif %}</em> {% endfor %}</p>
@@ -42,8 +42,8 @@
 			</div>
 			
 			<div class="col-md-6">
-				{% if volumes.0.0.list_toc.Article %}<h4 class="border-space">Articles</h4>{% endif %}
-				{% for i in volumes.0.0.list_toc.Article %}
+				{% if latest.0.list_toc.Article %}<h4 class="border-space">Articles</h4>{% endif %}
+				{% for i in latest.0.list_toc.Article %}
 					<a href="{{ i.0.get_absolute_url }}" class="static_a_display">
 						<strong> {{ i.0 }} </strong>
 						<p class="small">{% for j in i.1%} <em>{{ j }}{% if not forloop.last %}; {% endif %}</em> {% endfor %}</p>
@@ -52,20 +52,7 @@
 			</div>		
 		</div>
 
-		<div class="row">
-			<div class="col-md-12">
-				<h3 class="border-space">Past Issues</h3>
-			</div>
-			<div class="col-md-12">
-				<ul class="list-unstyled">
-				{% for volume in volumes %}
-					{% if not forloop.first %}
-						<li><a href="{% url 'collection' volume.0.identifier %}" class="btn btn-md btn-link static_a_display">{{ volume.0.name }}</a></li>
-					{% endif %}
-				{% endfor %}
-				</ul>
-			</div>
-		</div>
+
 	</div>
 	
 	<!-- RIGHT PANEL -->
@@ -98,7 +85,37 @@
 
 <!-- ROW 2 -->
 <div class="row">
-	<div class="col-md-12"></div>
+	<div class="col-md-12">
+		<h3 class="">Browse by Keyword</h3>
+	</div>
+	<div class="col-md-12">
+		<p>
+		{% for i in keywords %} 		
+			<a href="{% url 'haystack_search' %}?q={{i}}" class="btn btn-md btn-link static_a_display">{{ i }}</a>
+		{% endfor %}
+		</p>
+	</div>
+</div>
+
+<!-- ROW 3 -->
+<div class="row">
+	<div class="col-md-12">
+		<h3 class="border-space">Previous Issues</h3>
+	</div>			
+
+	{% for num, volume in volumes.items %}
+		{% if not forloop.last %}
+		<div class="col-md-3">
+			<a class="static_a_display" data-toggle="collapse" href="#id-{{num}}-collapse">
+				<i class="fa fa-caret-right"></i> {{ volume.0.name|slice:":9"}}</a>
+			<ul id="id-{{num}}-collapse" class="list-unstyled collapse">
+			{% for j in volume %}
+				<li><p><a href="{% url 'collection' j.identifier %}" class="static_a_display">{{ j.name }}</a></p></li>
+			{% endfor %}
+			</ul>
+		</div>
+		{% endif %}
+	{% endfor %}					
 </div>
 	
 {% endblock content %}
