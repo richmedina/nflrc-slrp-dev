@@ -12,6 +12,7 @@ from lltsite.views import (
     ItemViewFull,
     PageView,
     PageViewPrivate,
+    KeywordBrowseView,
     LanguageView, 
     ContributorView, 
     SearchView,
@@ -59,6 +60,9 @@ urlpatterns = [
 
     url(r'^page/(?P<pk>\w+)$',
      PageView.as_view(), name='page_view'),
+
+    url(r'^keys/$',
+     KeywordBrowseView.as_view(), name='keyword_browse_view'),
 
     url(r'^staff-page/(?P<pk>\w+)$',
      PageViewPrivate.as_view(), name='staff_page_view'),

@@ -21,11 +21,13 @@
         </form>
     </div>
     <div class="col-md-10 col-md-offset-1">
+        <p class="lead"><a href="{% url 'keyword_browse_view' %}">Browse by keyword</a></p>
         {% if query %}
             <h3>Results</h3>
             {% for result in page.object_list %}
-                <p class="lead">
+                <p class="">
                     <a href="{{ result.object.get_absolute_url }}">{{ result.object }}</a>
+                    <p>{% for i in result.object.get_readable_authors %} {{ i }}{% if not forloop.last %};{% endif %} {% endfor %}</p>
                 </p>
             {% empty %}
                 <p>No results found.</p>

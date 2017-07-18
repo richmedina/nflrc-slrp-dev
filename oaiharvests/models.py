@@ -202,6 +202,14 @@ class Record(TimeStampedModel):
         except:
             return []
 
+    def get_readable_authors(self):
+        try:
+            authors = self.get_metadata_item('contributor.author')[0]
+            authors = [k.split(',')[1] + ' ' + k.split(',')[0] for k in authors]
+            return authors
+        except Exception as e:
+            return []        
+
     def __unicode__(self):
         title = self.get_metadata_item('title')[0][0]
         return '%s'%(title)
