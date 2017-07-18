@@ -6,6 +6,7 @@ from django.views.generic import TemplateView, ListView, DetailView
 from django.db.models import Q
 
 from braces.views import LoginRequiredMixin
+from haystack.generic_views import SearchView
 
 from oaiharvests.models import Community, Collection, Record, MetadataElement
 from .models import StoryPage
@@ -95,6 +96,21 @@ class PageViewPrivate(LoginRequiredMixin, DetailView):
     context_object_name = 'page'
 
 
+class SearchHaystackView(SearchView):
+    def get_context_data(self, *args, **kwargs):
+        context = super(SearchHaystackView, self).get_context_data(*args, **kwargs)
+        keylist = ['Assessment/Testing','Behavior-tracking Technology','Blended/Hybrid Learning and Teaching','Code Switching','Collaborative Learning','Computer-Mediated Communication','Concordancing','Corpus','Culture','Data-driven Learning','Digital Literacies','Discourse Analysis','Distance/Open Learning and Teaching','Eye Tracking','Feedback','Game-based Learning and Teaching','Grammar','Human-Computer Interaction','Indigenous Languages','Instructional Context','Instructional Design','Language for Special Purposes','Language Learning Strategies','Language Maintenance','Language Teaching Methodology','Learner Attitudes','Learner Autonomy','Learner Identity','Less Commonly Taught Languages','Listening','Meta Analysis','Mobile Learning','MOOCs','Multiliteracies','Natural Language Processing','Open Educational Resources','Pragmatics','Pronunciation','Reading','Research Methods','Social Context','Sociocultural Theory','Social Networking','Speaking','Speech Recognition','Speech Synthesis','Task-based Learning and Teaching','Teacher Education','Telecollaboration','Ubiquitous Learning and Teaching','Virtual Environments','Vocabulary','Writing']
+
+        cols_length = len(keylist) / 3
+        keytable = []
+        for i in range(0, len(keylist), cols_length):
+            keytable.append(keylist[i:i+cols_length])
+
+        context['keytable'] = keytable
+        return context
+
+
+
 class KeywordBrowseView(TemplateView):
     template_name = 'page_keyword_browse.html'
 
@@ -153,36 +169,3 @@ class ContributorView(ListView):
         context['object'] = query
         return context
 
-
-class SearchView(ListView):
-    template_name = 'search.html'
-
-    def post(self, request, *args, **kwargs):
-        # arrays to hold values
-        self.items = []
-
-        # Grab POST values from the search query
-        self.query = self.request.POST.get('query')
-        self.key = self.request.POST.get('key')
-
-        self.queryset = MetadataElement.objects.filter(
-            element_type=self.query).filter(element_data__icontains=self.key)
-
-        for element in MetadataElement.objects.filter(element_type=self.query).filter(element_data__icontains=self.key):
-            self.items.append(element.record)
-
-        return super(SearchView, self).get(request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        context = super(SearchView, self).get_context_data(**kwargs)
-        context['items'] = self.items
-        context['len'] = len(self.items)
-        context['query'] = self.query
-        context['key'] = self.key
-        # pdb.set_trace()
-        return context
-
-
-class SearchPage(RecordSearchMixin, ListView):
-    model = Record
-    template_name = 'searchtest.html'

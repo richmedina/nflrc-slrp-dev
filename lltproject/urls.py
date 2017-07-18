@@ -15,8 +15,7 @@ from lltsite.views import (
     KeywordBrowseView,
     LanguageView, 
     ContributorView, 
-    SearchView,
-    SearchPage
+    SearchHaystackView
 )
 
 from oaiharvests.views import (
@@ -76,13 +75,13 @@ urlpatterns = [
     url(r'^contributor/(?P<query>[-\w]+)$',
      ContributorView.as_view(), name='contributor'),
 
-    # url(r'^search/$',
-    #    SearchView.as_view(), name='search'),
+    url(r'^search/$',
+       SearchHaystackView.as_view(), name='haystack_search'),
 
     # url(r'^searchtest/$',
     #    SearchPage.as_view(), name='searchtest'),
 
-    url(r'^search/', include('haystack.urls')),
+    # url(r'^search/', include('haystack.urls')),
 
     # ---------- OAI HARVESTER VIEWS ------------- #
     # Institutional Repositories #
