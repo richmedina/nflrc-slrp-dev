@@ -1,4 +1,5 @@
-import json, operator
+import json
+from operator import itemgetter
 from collections import Counter
 
 from django.shortcuts import get_object_or_404
@@ -99,6 +100,7 @@ class PageViewPrivate(LoginRequiredMixin, DetailView):
 class SearchHaystackView(SearchView):
     def get_context_data(self, *args, **kwargs):
         context = super(SearchHaystackView, self).get_context_data(*args, **kwargs)
+
         keylist = ['Assessment/Testing','Behavior-tracking Technology','Blended/Hybrid Learning and Teaching','Code Switching','Collaborative Learning','Computer-Mediated Communication','Concordancing','Corpus','Culture','Data-driven Learning','Digital Literacies','Discourse Analysis','Distance/Open Learning and Teaching','Eye Tracking','Feedback','Game-based Learning and Teaching','Grammar','Human-Computer Interaction','Indigenous Languages','Instructional Context','Instructional Design','Language for Special Purposes','Language Learning Strategies','Language Maintenance','Language Teaching Methodology','Learner Attitudes','Learner Autonomy','Learner Identity','Less Commonly Taught Languages','Listening','Meta Analysis','Mobile Learning','MOOCs','Multiliteracies','Natural Language Processing','Open Educational Resources','Pragmatics','Pronunciation','Reading','Research Methods','Social Context','Sociocultural Theory','Social Networking','Speaking','Speech Recognition','Speech Synthesis','Task-based Learning and Teaching','Teacher Education','Telecollaboration','Ubiquitous Learning and Teaching','Virtual Environments','Vocabulary','Writing']
 
         cols_length = len(keylist) / 3
@@ -106,6 +108,23 @@ class SearchHaystackView(SearchView):
         for i in range(0, len(keylist), cols_length):
             keytable.append(keylist[i:i+cols_length])
 
+        authorlist = []
+        for i in MetadataElement.objects.filter(element_type='contributor.author'):
+            for j in json.loads(i.element_data):
+                
+                n = j.split(',')
+                try:
+                    authorlist.append((n[1].strip(), n[0].strip()))
+                except:
+                    pass
+        authorlist = set(authorlist)
+        authorlist = sorted(authorlist, key=lambda author: author[1])
+        cols_length = len(authorlist) / 6
+        authortable = []
+        for i in range(0, len(authorlist), cols_length):
+            authortable.append(authorlist[i:i+cols_length])
+
+        context['authortable'] = authortable
         context['keytable'] = keytable
         return context
 

@@ -91,7 +91,7 @@
 	<div class="col-md-12">
 		<p>
 		{% for i in keywords|slice:":5" %} 		
-			<a href="{% url 'haystack_search' %}?q={{i}}" class="btn btn-md btn-link static_a_display">{{ i }}</a>
+			<a href="{% url 'haystack_search' %}?q={{i}}" class="btn btn-md btn-link btn-color-flat">{{ i }}</a>
 		{% endfor %}
 		</p>
 	</div>

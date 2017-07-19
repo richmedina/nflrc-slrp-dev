@@ -38,6 +38,8 @@ dt.metadata {
 
 /******************************** Colors *******************************************************/
 
+.btn-color-flat { background-color: #d49b32; color: #fff; }
+
 .bg-llt-gray { background: #eeeeee; color: #666;}
 .bg-llt-white { background: #fff; color: #666;}
 

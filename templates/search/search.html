@@ -15,20 +15,35 @@
             <div class="input-group">
                 <input type="text" class="form-control" placeholder="Search for..." name="q" value="{{query}}">
                 <span class="input-group-btn">
-                    <button type="submit" class="btn btn-color-flat" type="button"><i class="fa fa-search"></i></button>
+                    <button type="submit" class="btn btn-md" type="button"><i class="fa fa-search"></i></button>
                 </span>
             </div>            
         </form>
     </div>
     
     <div class="col-md-10 col-md-offset-1 text-center">
-        <h4><a href="#keylist" class="btn btn-md btn-default static_a_display" data-toggle="collapse"> <i class="fa fa-caret-down"></i> Browse by keyword?</a></h4>
-        <div id="keylist" class="row well collapse{% if not query %}-in{% endif %}" style="background-color: #fff">
+        <h4><a href="#keylist" class="btn btn-md btn-default static_a_display filter-btn" data-toggle="collapse"> <i class="fa fa-caret-down"></i> Browse by keyword?</a></h4>
+        <div id="keylist" class="row well collapse{% if not query %}-in{% endif %} filter-terms" style="background-color: #fff">
             {% for i in keytable %}
                 <div class="col-md-3 text-left">
                     <ul class="list-unstyled center-block">
                     {% for j in i %}
                         <li><a href="{% url 'haystack_search' %}?q={{j}}" class="btn btn-md btn-link static_a_display">{{ j }}</a></li>
+                    {% endfor %}
+                    </ul>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="col-md-10 col-md-offset-1 text-center">
+        <h4><a href="#authorlist" class="btn btn-md btn-default static_a_display filter-btn" data-toggle="collapse"> <i class="fa fa-caret-down"></i> Browse by author?</a></h4>
+        <div id="authorlist" class="row well collapse filter-terms" style="background-color: #fff">
+            {% for i in authortable %}
+                <div class="col-md-2 text-left">
+                    <ul class="list-unstyled center-block">
+                    {% for j in i %}
+                        <li><a href="{% url 'haystack_search' %}?q={{j.1}}" class="btn btn-md btn-link static_a_display">{{ j.0 }} {{ j.1 }}</a></li>
                     {% endfor %}
                     </ul>
                 </div>
@@ -56,4 +71,16 @@
             {# Show some example queries to run, maybe query syntax, something else? #}
         {% endif %}
     </div>
-{% endblock %}
+{% endblock content %}
+
+{% block js_script %}
+<script type="text/javascript">
+    jQuery(function($) { 
+        $(document).ready(function() {
+            $('.filter-terms').on('show.bs.collapse', function () {
+                $('.filter-terms').collapse( "hide" );  
+            });        
+        });
+    });   
+</script>
+{% endblock js_script %}
