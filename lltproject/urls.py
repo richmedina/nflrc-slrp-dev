@@ -15,7 +15,9 @@ from lltsite.views import (
     KeywordBrowseView,
     LanguageView, 
     ContributorView, 
-    SearchHaystackView
+    SearchHaystackView,
+    DissertationListView,
+    DissertationView
 )
 
 from oaiharvests.views import (
@@ -82,6 +84,16 @@ urlpatterns = [
     #    SearchPage.as_view(), name='searchtest'),
 
     # url(r'^search/', include('haystack.urls')),
+
+    url(r'^dissertation/$',
+     DissertationListView.as_view(), name='dissertation_list_view'),
+
+    url(r'^dissertation/(?P<pk>\w+)$',
+     DissertationView.as_view(), name='dissertation_view'),
+
+
+
+
 
     # ---------- OAI HARVESTER VIEWS ------------- #
     # Institutional Repositories #

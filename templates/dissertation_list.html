@@ -1,0 +1,12 @@
+<!-- dissertation_list.html -->
+{% extends 'base.html' %}
+
+{% block page_header %}<h2>Dissertations</h2>{% endblock page_header %}
+
+{% block content %}
+<div class="row">
+	<div class="col-md-12">
+		<ul class="list-unstyled">{% for i in object_list %} <li><a href="{% url 'dissertation_view' i.pk %}">{{ i }}</a></li> {% endfor %}</ul>
+	</div>
+</div>		
+{% endblock content %}

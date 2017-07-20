@@ -27,3 +27,22 @@ class StoryPage(TimeStampedModel):
 
     def __unicode__(self):
         return self.title
+
+
+class Dissertation(TimeStampedModel):
+    title = models.CharField(max_length=512)
+    author = models.CharField(max_length=255, help_text='<first>, ... <last>')
+    author_contact = models.EmailField(blank=True, null=True, help_text='(optional) email address')
+    abstract = models.TextField(default='', help_text='Raw text only please.')
+    keywords = models.TextField(default='', help_text='Enter 1 or more terms. Separate terms by a comma.')
+    publish_date = models.DateField(help_text='date of awarded dissertation')
+    department = models.CharField(max_length=512, blank=True, null=True, help_text='(optional)')
+    institution = models.CharField(max_length=512, help_text='University that awarded the dissertation.')
+    url = models.URLField(blank=True, null=True, help_text='(optional) url with access to the document.')
+
+    def get_absolute_url(self):
+        return reverse('dissertation_view', args=[str(self.pk)])
+
+    def __unicode__(self):
+        return self.title    
+

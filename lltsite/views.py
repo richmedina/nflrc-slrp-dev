@@ -10,7 +10,7 @@ from braces.views import LoginRequiredMixin
 from haystack.generic_views import SearchView
 
 from oaiharvests.models import Community, Collection, Record, MetadataElement
-from .models import StoryPage
+from .models import StoryPage, Dissertation
 from .mixins import RecordSearchMixin
 
 
@@ -132,7 +132,6 @@ class SearchHaystackView(SearchView):
         return context
 
 
-
 class KeywordBrowseView(TemplateView):
     template_name = 'page_keyword_browse.html'
 
@@ -148,7 +147,6 @@ class KeywordBrowseView(TemplateView):
 
         context['keytable'] = keytable
         return context
-
 
 
 class LanguageView( ListView):
@@ -191,3 +189,14 @@ class ContributorView(ListView):
         context['object'] = query
         return context
 
+
+# Dissertations
+
+class DissertationListView(ListView):
+    model = Dissertation
+    template_name = 'dissertation_list.html'
+
+
+class DissertationView(DetailView):
+    model = Dissertation
+    template_name = 'dissertation_view.html' 
