@@ -110,21 +110,24 @@ class SearchHaystackView(SearchView):
 
         authorlist = []
         for i in MetadataElement.objects.filter(element_type='contributor.author'):
-            for j in json.loads(i.element_data):
-                
+            for j in json.loads(i.element_data):                
+                # swap the first and last so last appears after first.
                 n = j.split(',')
                 try:
                     authorlist.append((n[1].strip(), n[0].strip()))
                 except:
                     pass
+        
         authorlist = set(authorlist)
-        authorlist = sorted(authorlist, key=lambda author: author[1])
-        cols_length = len(authorlist) / 6
-        authortable = []
-        for i in range(0, len(authorlist), cols_length):
-            authortable.append(authorlist[i:i+cols_length])
+        authorlist = sorted(authorlist, key=lambda author: author[1].lower())
 
-        context['authortable'] = authortable
+        # will create n sets of authors to be rendered in columns
+        # cols_length = len(authorlist) / 6
+        # authortable = []
+        # for i in range(0, len(authorlist), cols_length):
+        #     authortable.append(authorlist[i:i+cols_length])
+
+        context['authortable'] = authorlist # using flat list for now. authortable an option if needed.
         context['keytable'] = keytable
         return context
 
