@@ -20,15 +20,28 @@
             </div>            
         </form>
     </div>
-    
-    <div class="col-md-10 col-md-offset-1 text-center">
-        <h4><a href="#keylist" class="btn btn-md btn-default static_a_display filter-btn" data-toggle="collapse"> <i class="fa fa-caret-down"></i> Browse by keyword?</a></h4>
+
+    <div class="col-md-10 col-md-offset-1 text-center" style="padding-top: 10px">
+        <a href="#keylist" class="btn btn-md btn-default static_a_display filter-btn" data-toggle="collapse"> <i class="fa fa-caret-down"></i> Browse by keyword?</a>
+        <a href="#authorlist" class="btn btn-md btn-default static_a_display filter-btn" data-toggle="collapse"> <i class="fa fa-caret-down"></i> Browse by author?</a>
+
         <div id="keylist" class="row well collapse{% if not query %}-in{% endif %} filter-terms" style="background-color: #fff">
             {% for i in keytable %}
                 <div class="col-md-3 text-left">
                     <ul class="list-unstyled center-block">
                     {% for j in i %}
-                        <li><a href="{% url 'haystack_search' %}?q={{j}}" class="btn btn-md btn-link static_a_display">{{ j }}</a></li>
+                        <li><p><a href="{% url 'haystack_search' %}?q={{j}}" class="static_a_display">{{ j }}</a></p></li>
+                    {% endfor %}
+                    </ul>
+                </div>
+            {% endfor %}
+        </div>
+        <div id="authorlist" class="row well collapse filter-terms" style="background-color: #fff">
+            {% for i in authortable %}
+                <div class="col-md-2 text-left">
+                    <ul class="list-unstyled center-block">
+                    {% for j in i %}
+                        <li><p><a href="{% url 'haystack_search' %}?q={{j.1}}" class="static_a_display">{{ j.0 }} {{ j.1 }}</a></p></li>
                     {% endfor %}
                     </ul>
                 </div>
@@ -37,18 +50,7 @@
     </div>
 
     <div class="col-md-10 col-md-offset-1 text-center">
-        <h4><a href="#authorlist" class="btn btn-md btn-default static_a_display filter-btn" data-toggle="collapse"> <i class="fa fa-caret-down"></i> Browse by author?</a></h4>
-        <div id="authorlist" class="row well collapse filter-terms" style="background-color: #fff">
-            {% for i in authortable %}
-                <div class="col-md-2 text-left">
-                    <ul class="list-unstyled center-block">
-                    {% for j in i %}
-                        <li><a href="{% url 'haystack_search' %}?q={{j.1}}" class="btn btn-md btn-link static_a_display">{{ j.0 }} {{ j.1 }}</a></li>
-                    {% endfor %}
-                    </ul>
-                </div>
-            {% endfor %}
-        </div>
+
     </div>
 
     <div class="col-md-10 col-md-offset-1">        

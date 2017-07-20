@@ -1,4 +1,4 @@
 {{ object.identifier }}
-{{ object.as_display_dict }}
+{{ object.as_dict_string_format }}
 {{ object.get_keyword_list }}
 

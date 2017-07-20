@@ -178,9 +178,27 @@ class Record(TimeStampedModel):
         for e in elements:
             data = json.loads(e.element_data)
             record_dict[e.element_type] = data
-            record_dict['collection'] = [self.hdr_setSpec]
-            record_dict['site_url'] = [self.get_absolute_url()]
+        record_dict['collection'] = [self.hdr_setSpec]
+        record_dict['site_url'] = [self.get_absolute_url()]
+        
         return self.sort_metadata_dict(record_dict)
+
+    def as_dict_string_format(self):
+        record_dict = {}
+        record_str = ''
+        elements = self.data.all().order_by('element_type')
+        # print elements
+        for e in elements:
+            data = json.loads(e.element_data)
+            try:
+                record_str += u'; '.join(data) + ' '
+            except:
+                record_str += str(data) + ' '
+
+        record_str += self.hdr_setSpec.name + '  '
+        record_str += self.get_absolute_url() + ' '
+        
+        return record_str
 
     def as_display_dict(self):
         record_dict = self.as_dict()
