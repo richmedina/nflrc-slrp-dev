@@ -68,8 +68,8 @@
     <!-- Page content -->
     <div class="container-fluid">
         {% block submenu %}<div class="row"><div class="col-md-12 submenu"></div></div>{% endblock %} 
+        
         <div class="row"><div class="col-md-12">{% block page_header %}{% endblock page_header %}</div></div>
-    
     
         {% block content %} {% endblock content %}
     </div>
@@ -78,12 +78,8 @@
 
     <!-- Footer -->
     <div class="navbar navbar-default navbar-fixed-bottom" role="navigation">
-        <div id="footer" class="container-fluid">
-            <p class="text-muted">Site developed and maintained by the Center for Language & Technology, University of Hawai‘i at Mānoa <a href="{% url 'admin:index' %}"><i class="fa fa-lock"></i></a></p>
-
-            <ul class="nav navbar-nav navbar-right">
-                <li></li>
-            </ul>
+        <div id="footer" class="container-fluid text-muted">
+            Site developed and maintained by the <a href="https://clt.manoa.hawaii.edu" target="_blank">Center for Language & Technology</a>, University of Hawai‘i at Mānoa <a href="{% url 'admin:index' %}"><i class="fa fa-lock"></i></a>
         </div>
     </div>
   

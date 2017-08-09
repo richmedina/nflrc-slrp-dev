@@ -2,7 +2,7 @@ import json
 from operator import itemgetter
 from collections import Counter
 
-from django.shortcuts import get_object_or_404
+from django.shortcuts import reverse, get_object_or_404
 from django.views.generic import TemplateView, ListView, DetailView
 from django.db.models import Q
 
@@ -87,14 +87,26 @@ class PageView(DetailView):
 
     def get(self, request, *args, **kwargs):
         if self.get_object().private:
+            # will redirect to login required view
             return redirect('staff_page_view', item=self.get_object().id)
         return super(PageView, self).get(request, *args, **kwargs)
 
+    def get_context_data(self, *args, **kwargs):
+        context = super(PageView, self).get_context_data(*args, **kwargs)
+        context['admin_edit'] = reverse('admin:lltsite_storypage_change', args=(self.get_object().id,))
+        context['curr_page'] = self.get_object().id
+        return context
 
 class PageViewPrivate(LoginRequiredMixin, DetailView):
     model = StoryPage
     template_name = 'page_view.html'
     context_object_name = 'page'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(PageViewPrivate, self).get_context_data(*args, **kwargs)
+        context['admin_edit'] = reverse('admin:lltsite_storypage_change', args=(self.get_object().id,))
+        context['curr_page'] = self.get_object().id
+        return context
 
 
 class SearchHaystackView(SearchView):
@@ -196,7 +208,18 @@ class DissertationListView(ListView):
     model = Dissertation
     template_name = 'dissertation_list.html'
 
+    def get_context_data(self, *args, **kwargs):
+        context = super(DissertationListView, self).get_context_data(*args, **kwargs)
+        context['admin_add'] = reverse('admin:lltsite_dissertation_add')
+        context['curr_page'] = 'dissertations'
+        return context
 
 class DissertationView(DetailView):
     model = Dissertation
     template_name = 'dissertation_view.html' 
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(DissertationView, self).get_context_data(*args, **kwargs)
+        context['admin_edit'] = reverse('admin:lltsite_dissertation_change', args=(self.get_object().id,))
+
+        return context

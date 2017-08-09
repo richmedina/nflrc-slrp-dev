@@ -33,8 +33,11 @@ dt.metadata {
 }
 
 .navbar-fixed-bottom {
-  text-align: center;
+  background-color: #fff;
+  border-top: solid 1px #ccc;
 }
+
+#footer { padding-top: 16px; text-align: center;}
 
 /******************************** Colors *******************************************************/
 
@@ -46,6 +49,7 @@ dt.metadata {
 .bg-llt-burgundy { background: #7d0000; color: #fff; }
 .llt-burgundy {color: #7d0000; border-color: #7d0000;}
 
+.lt-gray {color: #ddd;}
 
 /******************************** Centered Submenu **********************************************/
 

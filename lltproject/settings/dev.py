@@ -11,6 +11,8 @@ SECRET_KEY = os.environ['SECRET_KEY']
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
+STATIC_ROOT = '/Library/WebServer/Documents/static/nflrcllt'
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',

@@ -143,6 +143,6 @@ urlpatterns = [
      OaiCollectionHarvestView.as_view(
      ), name='oai_harvest_collection'),
 
-
+    url(r'^grappelli/', include('grappelli.urls')), # grappelli URLS
     url(r'^admin/', include(admin.site.urls), name='index'),
 ]
