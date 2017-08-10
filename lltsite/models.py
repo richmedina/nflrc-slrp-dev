@@ -5,6 +5,7 @@ from django.core.urlresolvers import reverse
 
 from model_utils.models import TimeStampedModel
 
+from .formdata import countries, states, languages, occupations
 
 class StoryPage(TimeStampedModel):
     title = models.CharField(max_length=255, blank=True)
@@ -28,4 +29,17 @@ class StoryPage(TimeStampedModel):
     def __unicode__(self):
         return self.title
 
+class Subscriber(TimeStampedModel):
+    email = models.EmailField(blank=False)
+    first_name = models.CharField(max_length=254, blank=False)
+    last_name = models.CharField(max_length=254, blank=False)
+    country = models.CharField(max_length=254, blank=False, choices=countries)
+    state = models.CharField(max_length=254, blank=True, choices=states)
+    occupation = models.CharField(max_length=254, blank=True, choices=occupations)
+    language_speak  = models.CharField(max_length=512, blank=True, choices=languages)
+    language_teach  = models.CharField(max_length=512, blank=True,choices=languages)
+    notifications_on = models.BooleanField(default=False)
+
+    def __unicode__(self):
+        return self.email
 
