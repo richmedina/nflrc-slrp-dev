@@ -1,7 +1,7 @@
 # lltsite/admin.py
 from django.contrib import admin
 
-from .models import StoryPage
+from .models import StoryPage, Subscriber
 
 class ExtraMedia:
     js = [
@@ -14,3 +14,4 @@ class StoryPageAdmin(admin.ModelAdmin):
     list_display_links = ('pk',)
 
 admin.site.register(StoryPage, StoryPageAdmin, Media = ExtraMedia)
+admin.site.register(Subscriber)

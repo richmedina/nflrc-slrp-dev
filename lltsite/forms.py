@@ -20,6 +20,6 @@ class CreateSubscriberForm(ModelForm):
         	'country': forms.Select(),
         	'state': forms.Select(),
         	'occupation': forms.Select(),
-        	'language_speak': forms.SelectMultiple(),
-        	'language_teach': forms.SelectMultiple()
+        	'language_speak': forms.Select(),
+        	'language_teach': forms.Select()
         }

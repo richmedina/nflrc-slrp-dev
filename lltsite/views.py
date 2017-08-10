@@ -2,7 +2,8 @@ import json
 from operator import itemgetter
 from collections import Counter
 
-from django.shortcuts import reverse, get_object_or_404
+from django.shortcuts import get_object_or_404
+from django.urls import reverse_lazy, reverse
 from django.views.generic import TemplateView, ListView, DetailView, CreateView
 from django.db.models import Q
 
@@ -179,4 +180,6 @@ class SubscriberCreateView(CreateView):
     model = Subscriber
     template_name = 'subscriber_create.html'
     form_class= CreateSubscriberForm
+    success_url = reverse_lazy('home')
+
 
