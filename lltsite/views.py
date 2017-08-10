@@ -27,6 +27,18 @@ class HomeView(TemplateView):
         return context
 
 
+class PreviousIssuesView(TemplateView):
+    template_name = 'previous_issues.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(PreviousIssuesView, self).get_context_data(**kwargs)
+        journal = Community.objects.all()[0]
+        context['volumes'] = journal.list_collections_by_volume()
+        context['latest'] = [(vol, vol.list_records()) for vol in Collection.objects.all().order_by('-name')][0]
+        context['curr_page'] = 'previous_issues'
+        return context
+
+
 class CommunityView(DetailView):
     model = Community
     template_name = 'community_view.html'
@@ -97,6 +109,7 @@ class PageView(DetailView):
         context['curr_page'] = self.get_object().id
         return context
 
+
 class PageViewPrivate(LoginRequiredMixin, DetailView):
     model = StoryPage
     template_name = 'page_view.html'
@@ -158,46 +171,5 @@ class KeywordBrowseView(TemplateView):
             keytable.append(keylist[i:i+cols_length])
 
         context['keytable'] = keytable
-        return context
-
-
-class LanguageView( ListView):
-    model = Record
-    template_name = 'collection_view.html'
-
-    def get_context_data(self, **kwargs):
-        query = self.kwargs['query']        
-        self.queryset = Record.objects.filter(data__element_type='language').filter(
-            data__element_data__icontains=query)
-        
-        context = super(LanguageView, self).get_context_data(**kwargs)
-        context['items'] = self.queryset
-        context['size'] = len(self.queryset)   
-        context['object'] = query + ' language'
-        return context
-
-
-class ContributorView(ListView):
-    model = Record
-    template_name = 'collection_view.html'
-
-    def get_context_data(self, **kwargs):
-        query = self.kwargs['query']
-        self.queryset = []
-        if len(query.split('-')) != 1:
-            firstQuery = query.split('-')[0]
-            lastQuery = query.split('-')[1]
-            q = MetadataElement.objects.filter(element_type='contributor').filter(Q(element_data__icontains=firstQuery) & Q(element_data__icontains=lastQuery))
-            
-        else:
-            q = MetadataElement.objects.filter(element_type='contributor').filter(element_data__icontains=query)
-
-        for i in q:
-            self.queryset.append(i.record)
-
-        context = super(ContributorView, self).get_context_data(**kwargs)
-        context['items'] = self.queryset
-        context['size'] = len(self.queryset)
-        context['object'] = query
         return context
 

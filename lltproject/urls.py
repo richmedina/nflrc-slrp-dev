@@ -5,6 +5,7 @@ admin.autodiscover()
 
 from lltsite.views import (
     HomeView, 
+    PreviousIssuesView,
     CommunityView, 
     CollectionListView, 
     CollectionView, 
@@ -13,8 +14,6 @@ from lltsite.views import (
     PageView,
     PageViewPrivate,
     KeywordBrowseView,
-    LanguageView, 
-    ContributorView, 
     SearchHaystackView,
 )
 
@@ -42,6 +41,9 @@ urlpatterns = [
 
     url(r'^$', HomeView.as_view(), name='home'),
 
+    url(r'^previous-issues/$',
+     PreviousIssuesView.as_view(), name='previous_issues'),
+
     url(r'^community/(?P<pk>\w+)$',
      CommunityView.as_view(), name='community'),                       
 
@@ -65,15 +67,6 @@ urlpatterns = [
 
     url(r'^staff-page/(?P<pk>\w+)$',
      PageViewPrivate.as_view(), name='staff_page_view'),
-
-    url(r'^language/(?P<query>\w+)$',
-     LanguageView.as_view(), name='language'),
-
-    # url(r'^depositor/(?P<query>\w+)$',
-    #     ContributorView.as_view(), name='collection'),
-
-    url(r'^contributor/(?P<query>[-\w]+)$',
-     ContributorView.as_view(), name='contributor'),
 
     url(r'^search/$',
        SearchHaystackView.as_view(), name='haystack_search'),
