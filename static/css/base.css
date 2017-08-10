@@ -39,6 +39,12 @@ dt.metadata {
 
 #footer { padding-top: 16px; text-align: center;}
 
+.table-borderless td,
+.table-borderless th
+ {
+    border: none !important;
+}
+
 /******************************** Colors *******************************************************/
 
 .btn-color-flat { background-color: #d49b32; color: #fff; }
