@@ -3,15 +3,16 @@ from operator import itemgetter
 from collections import Counter
 
 from django.shortcuts import reverse, get_object_or_404
-from django.views.generic import TemplateView, ListView, DetailView
+from django.views.generic import TemplateView, ListView, DetailView, CreateView
 from django.db.models import Q
 
 from braces.views import LoginRequiredMixin
 from haystack.generic_views import SearchView
 
 from oaiharvests.models import Community, Collection, Record, MetadataElement
-from .models import StoryPage
+from .models import StoryPage, Subscriber
 from .mixins import RecordSearchMixin
+from .forms import CreateSubscriberForm
 
 
 class HomeView(TemplateView):
@@ -172,4 +173,10 @@ class KeywordBrowseView(TemplateView):
 
         context['keytable'] = keytable
         return context
+
+
+class SubscriberCreateView(CreateView):
+    model = Subscriber
+    template_name = 'subscriber_create.html'
+    form_class= CreateSubscriberForm
 

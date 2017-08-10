@@ -15,6 +15,7 @@ from lltsite.views import (
     PageViewPrivate,
     KeywordBrowseView,
     SearchHaystackView,
+    SubscriberCreateView,
 )
 
 from oaiharvests.views import (
@@ -70,6 +71,9 @@ urlpatterns = [
 
     url(r'^search/$',
        SearchHaystackView.as_view(), name='haystack_search'),
+
+    url(r'^subscribe/$',
+       SubscriberCreateView.as_view(), name='subscribe'),
 
     # url(r'^searchtest/$',
     #    SearchPage.as_view(), name='searchtest'),

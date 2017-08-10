@@ -40,7 +40,7 @@ INSTALLED_APPS = (
     'haystack',
     'oaiharvests',
     'lltsite',
-
+    'crispy_forms',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -106,5 +106,7 @@ HAYSTACK_CONNECTIONS = {
         'INDEX_NAME': 'haystack',
     },
 }
+
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 

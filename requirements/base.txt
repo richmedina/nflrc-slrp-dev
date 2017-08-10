@@ -5,6 +5,8 @@ chardet==3.0.4
 cryptography==1.9
 Django==1.11.2
 django-braces==1.11.0
+django-crispy-forms==1.6.1
+django-grappelli==2.10.1
 django-haystack==2.6.1
 django-model-utils==3.0.0
 ecdsa==0.13
@@ -27,4 +29,3 @@ six==1.10.0
 sqlparse==0.2.3
 Unipath==1.1
 urllib3==1.21.1
-#elasticsearch>=2.0.0,<3.0.0

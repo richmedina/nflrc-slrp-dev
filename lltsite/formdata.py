@@ -1,6 +1,7 @@
 # formdata.py
 
 countries = (
+	("", "-- Select Country --"),
 	("USA", "United States of America"),
 	("CAN", "Canada"),
 	("AFG", "Afghanistan"),
