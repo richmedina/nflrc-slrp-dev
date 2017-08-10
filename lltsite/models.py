@@ -30,7 +30,7 @@ class StoryPage(TimeStampedModel):
         return self.title
 
 class Subscriber(TimeStampedModel):
-    email = models.EmailField(blank=False)
+    email = models.EmailField(blank=False, unique=True)
     first_name = models.CharField(max_length=254, blank=False)
     last_name = models.CharField(max_length=254, blank=False)
     country = models.CharField(max_length=254, blank=False, choices=countries)
