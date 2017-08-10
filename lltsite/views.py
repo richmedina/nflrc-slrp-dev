@@ -10,7 +10,7 @@ from braces.views import LoginRequiredMixin
 from haystack.generic_views import SearchView
 
 from oaiharvests.models import Community, Collection, Record, MetadataElement
-from .models import StoryPage, Dissertation
+from .models import StoryPage
 from .mixins import RecordSearchMixin
 
 
@@ -201,25 +201,3 @@ class ContributorView(ListView):
         context['object'] = query
         return context
 
-
-# Dissertations
-
-class DissertationListView(ListView):
-    model = Dissertation
-    template_name = 'dissertation_list.html'
-
-    def get_context_data(self, *args, **kwargs):
-        context = super(DissertationListView, self).get_context_data(*args, **kwargs)
-        context['admin_add'] = reverse('admin:lltsite_dissertation_add')
-        context['curr_page'] = 'dissertations'
-        return context
-
-class DissertationView(DetailView):
-    model = Dissertation
-    template_name = 'dissertation_view.html' 
-
-    def get_context_data(self, *args, **kwargs):
-        context = super(DissertationView, self).get_context_data(*args, **kwargs)
-        context['admin_edit'] = reverse('admin:lltsite_dissertation_change', args=(self.get_object().id,))
-
-        return context
