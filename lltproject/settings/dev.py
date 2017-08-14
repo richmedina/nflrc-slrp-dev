@@ -24,7 +24,7 @@ GOOGLE_RECAPTCHA_SECRET_KEY = os.environ['GOOGLE_RECAPTCHA_SECRET_KEY']
 
 
 MEDIA_ROOT = '/Library/WebServer/Documents/media/nflrcllt'
-MEDIA_URL = 'media/nflrcllt/'
+MEDIA_URL = 'http://localhost/media/nflrcllt/'
 
 
 # FILEBROWSER SETTINGS
