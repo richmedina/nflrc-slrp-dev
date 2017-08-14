@@ -1,7 +1,9 @@
 from django.conf.urls import include, url
-
 from django.contrib import admin
 admin.autodiscover()
+
+from filebrowser.sites import site
+
 
 from lltsite.views import (
     HomeView, 
@@ -130,6 +132,7 @@ urlpatterns = [
      OaiCollectionHarvestView.as_view(
      ), name='oai_harvest_collection'),
 
+    url(r'^admin/filebrowser/', include(site.urls)),
     url(r'^grappelli/', include('grappelli.urls')), # grappelli URLS
     url(r'^admin/', include(admin.site.urls), name='index'),
 ]
