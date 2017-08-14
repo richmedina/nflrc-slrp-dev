@@ -46,7 +46,7 @@ class CustomIndexDashboard(Dashboard):
             children=[
                 {
                     'title': _('FileBrowser'),
-                    'url': '/admin/filebrowser/browse/',
+                    'url': './filebrowser/browse/',
                     'external': False,
                 },
             ]
