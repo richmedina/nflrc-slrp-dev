@@ -23,3 +23,5 @@ DATABASES = {
         'PORT': '5432',
     }
 }
+
+GOOGLE_RECAPTCHA_SECRET_KEY = os.environ['GOOGLE_RECAPTCHA_SECRET_KEY']

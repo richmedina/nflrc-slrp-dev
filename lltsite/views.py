@@ -1,11 +1,15 @@
 import json
 from operator import itemgetter
 from collections import Counter
+import urllib
+import urllib2
 
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views.generic import TemplateView, ListView, DetailView, CreateView
 from django.db.models import Q
+from django.contrib import messages
+from django.conf import settings
 
 from braces.views import LoginRequiredMixin
 from haystack.generic_views import SearchView
@@ -181,5 +185,29 @@ class SubscriberCreateView(CreateView):
     template_name = 'subscriber_create.html'
     form_class= CreateSubscriberForm
     success_url = reverse_lazy('home')
+
+    def form_valid(self, form):
+        # Begin reCAPTCHA validation with google.
+        recaptcha_response = self.request.POST.get('g-recaptcha-response')
+            
+        url = 'https://www.google.com/recaptcha/api/siteverify'
+        values = {
+            'secret':  settings.GOOGLE_RECAPTCHA_SECRET_KEY,
+            'response': recaptcha_response
+        }
+        data = urllib.urlencode(values)
+        req = urllib2.Request(url, data)
+        response = urllib2.urlopen(req)
+        result = json.load(response)
+        # End reCAPTCHA validation 
+
+        if result['success']:
+            messages.success(self.request, 'Your email has been registered.', extra_tags='success')
+            return super(SubscriberCreateView, self).form_valid(form)
+        else:
+            messages.error(self.request, 'Invalid reCAPTCHA. Please try again.', extra_tags='danger')
+            return super(SubscriberCreateView, self).form_invalid(form)     
+
+        
 
 
