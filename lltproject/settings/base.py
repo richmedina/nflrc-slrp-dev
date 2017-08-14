@@ -30,6 +30,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = (
+    'grappelli.dashboard',
     'grappelli',
     'filebrowser',
     'django.contrib.admin',
@@ -111,5 +112,7 @@ HAYSTACK_CONNECTIONS = {
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 
+GRAPPELLI_ADMIN_TITLE = 'LLT Site Administration'
+GRAPPELLI_INDEX_DASHBOARD = 'lltsite.dashboard.CustomIndexDashboard'
 
 
