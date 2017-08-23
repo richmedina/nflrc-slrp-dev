@@ -11,6 +11,9 @@ body {
   font-weight: 400;
 }
 
+.container-fluid {
+  max-width: 1250px;
+}
 .static_a_display:link {color: #666; text-decoration: none;}
 .static_a_display:visited {color: #666; text-decoration: none;}
 .static_a_display:hover {color: #000; text-decoration: none; background-color: #e8eaed;}
