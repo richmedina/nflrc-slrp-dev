@@ -9,6 +9,13 @@
 		<h5>Dorothy Chun and Trude Heift, Editors</h5>
 		<p class="small">Supported by the Center for Language & Technology and the National Foreign Language Resource Center (NFLRC) at the University of Hawaii, and the Center for Language & Education Research at Michigan State University</p>	
 	</div>
+	<div class="col-md-3">
+		<div class="text-center panel panel-default">
+			<p style="font-size: 0.8em">Impact Factor </br>(2016 ISI Journal Citation Reports)</p>
+			<p style="font-size: 1.5em">2.293</p>			
+		</div>
+		
+	</div>
 </div>	
 {% endblock page_header %}
 
@@ -62,22 +69,13 @@
 
 <!-- ROW 2 -->
 <div class="row">
-	<div class="col-md-12">
-		<h3>Top Five Keywords <span class="small"><a href="{% url 'haystack_search' %}" class="btn btn-md btn-link static_a_display">view all</a></span></h3>
-	</div>
-	<div class="col-md-12">
-		<p>
-		{% for i in keywords|slice:":5" %} 		
-			<a href="{% url 'haystack_search' %}?q={{i}}" class="btn btn-md btn-link btn-color-flat">{{ i }}</a>
-		{% endfor %}
-		</p>
-	</div>
+
 </div>
 
 <!-- ROW 3 -->
 <div class="row">
 	<div class="col-md-12">
-		<h3 class="border-space">Previous Issues</h3>
+		<h3 class="border-space">Previous Issues <a href="{% url 'previous_issues' %}" class="btn btn-small btn-link static_a_display">view all</a></h3>		
 	</div>			
 
 	{% for num, volume in volumes.items %}
