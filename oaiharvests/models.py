@@ -46,7 +46,7 @@ class Community(TimeStampedModel):
     def list_collections_by_volume(self):
         # TODO: return collections grouped by volume number.
         volumes_group = OrderedDict()
-        volumes = self.collection_set.all().order_by('name')
+        volumes = self.collection_set.all().order_by('-name')
         for i in volumes:
             # get a record from the volume
             rec = i.list_records()[0]
