@@ -157,7 +157,7 @@ class OaiCollectionCreateView(CreateView):
     community = None    
 
     def get(self, request, *args, **kwargs):
-        self.community = Community.objects.get(pk=self.kwargs.get('community'))    
+        self.community = Community.objects.get(pk=self.kwargs.get('community')) 
         return super(OaiCollectionCreateView, self).get(request, *args, **kwargs)
 
     def post(self, request, **kwargs):
