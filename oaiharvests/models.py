@@ -11,7 +11,7 @@ import pdb #pdb.set_trace()
 
 TYPES = ['publisher', 'description.provenance', 'identifier.doi', 'title', 'bitstream', 'date.available', 'type.dcmi', 'relation.uri', 'identifier.citation', 'format.extent', 'description.abstract', 'date.accessioned', 'language.iso', 'relation.ispartofseries', 'identifier.issn', 'date.issued', 'identifier.uri', 'type', 'contributor.author', 'subject', 'volume', 'startingpage']
 
-DISPLAY_TYPE_ORDER = ['title', 'contributor.author', 'description.abstract', 'bitstream', 'bitstream_txt', 'subject', 'publisher', 'type', 'relation.ispartofseries', 'date.issued', 'identifier.doi', 'identifier.uri', 'identifier.citation', 'volume', 'startingpage']
+DISPLAY_TYPE_ORDER = ['title', 'contributor.author', 'description.abstract', 'bitstream', 'bitstream_txt', 'subject', 'publisher', 'type', 'relation.ispartofseries', 'date.issued', 'identifier.doi', 'identifier.uri', 'identifier.citation', 'volume', 'startingpage', 'endingpage']
 
 
 class Repository(TimeStampedModel):
@@ -100,15 +100,20 @@ class Collection(TimeStampedModel):
             t = [i]
             
             try:
-                t.append(record_data['startingpage'][0])
+                t.append(int(record_data['startingpage'][0]))
             except Exception as e:
-                t.append('0')
-            
+                t.append(0)
+
+            try:
+                t.append(int(record_data['endingpage'][0]))
+            except Exception as e:
+                t.append(0)
+
             try:
                 t.append(record_data['volume'][0])
             except Exception as e:
                 t.append('0')
-
+            # print t, '\n'
             records.append(t)
 
         return sorted(records, key=lambda rec: rec[1])
@@ -117,20 +122,60 @@ class Collection(TimeStampedModel):
         toc = defaultdict(list)
         for i in self.list_records():
             d = i.as_dict()
-            # print d, '\n'
+            print d, '\n'
             try:
-                for j in d['type']:
+                for j in d['type']:  # Build toc data.
                     try:
                         authors = d['contributor.author']
                         authors = [k.split(',')[1] + ' ' + k.split(',')[0] for k in authors]
                         try:
-                            toc[j].append((i, authors, d['description.abstract']))
+                            toc[j].append((i, authors, d['description.abstract'], d['startingpage']))
                         except KeyError:
                             toc[j].append((i, authors, ''))
                     except:
                         toc[j].append((i, '', ''))
             except:
                 pass
+        return toc
+
+    def list_toc_by_page(self):
+        """Returns a dictionary that groups record objects by type of record.
+        A type is but not limited to: ARTICLE, COLUMN, or REVIEW.
+        Each record is a list with the following the format:
+
+        {TYPE_NAME: [ [REC OBJECT, AUTHOR LIST, ABSTRACT TEXT, PAGE START], ... ]}
+        """
+        toc = defaultdict(list)
+        for rec in self.list_records_by_page_and_volume():  # Returns a list of [ [REC OBJ, PAGE START, PAGE END, VOL NUM], ... ]
+            rec_obj = rec[0]       # Record object
+            rec_data = rec_obj.as_dict()  # Fetch the record data
+
+            try:
+                for rec_type in rec_data['type']:
+                    toc_item = [rec_obj, [], [], '']  # Set defaults (rec object, authors, abstract, start page)
+                    try:
+                        authors = rec_data['contributor.author'] # Pretty print author list
+                        authors = [k.split(',')[1] + ' ' + k.split(',')[0] for k in authors]
+                        toc_item[1] = authors
+                    except:
+                        pass  # Problem parsing authors but default already set to empty.
+                    try:
+                        toc_item[2] = rec_data['description.abstract']
+                    except:
+                        pass  # Problem fetching abstract but default already set to empty.
+                    
+                    if rec[1]: toc_item[3] = rec[1]  # Fetch page number from list if not zero
+
+                    # Group according to record type...
+                    try:
+                        toc[rec_type].append(toc_item)
+                    except KeyError:
+                        toc[rec_type] = []
+                        toc[rec_type].append(toc_item)
+                    # print toc_item
+            except:
+                pass  # record must not have a type specified so proceed quietly
+        
         return toc
 
     def get_absolute_url(self):

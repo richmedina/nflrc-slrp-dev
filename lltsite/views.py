@@ -29,7 +29,9 @@ class HomeView(TemplateView):
         journal = Community.objects.all()[0]
         context['keywords'] =  journal.aggregate_keywords()
         context['volumes'] = journal.list_collections_by_volume()
-        context['latest'] = [(vol, vol.list_records()) for vol in Collection.objects.all().order_by('-name')][0]
+        context['latest'] = Collection.objects.all().order_by('-name')[0]
+        context['toc'] = context['latest'].list_toc_by_page()
+        # context['latest'] = [(vol, vol.list_records()) for vol in Collection.objects.all().order_by('-name')][0]
         return context
 
 
@@ -71,7 +73,7 @@ class CollectionView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(CollectionView, self).get_context_data(**kwargs)
-        context['toc'] = dict(self.get_object().list_toc())
+        context['toc'] = self.get_object().list_toc_by_page()
         context['size'] = len(context['toc'])
         return context
 

@@ -27,32 +27,33 @@
 	<div class="col-md-9">
 		<div class="row">
 			<div class="col-md-12">
-				<h3><a href="{% url 'collection' latest.0.identifier %}" class="static_a_display" style="color: #000">{{ latest.0.name }} <sup><span class="badge">newest</span></sup></a></h3>
-			</div>				
+				<h3><a href="{% url 'collection' latest.identifier %}" class="static_a_display" style="color: #000">{{ latest.name }} <sup><span class="badge">newest</span></sup></a></h3>
+			</div>
+
 
 			<div class="col-md-6">
-				{% if latest.0.list_toc.Article %}<h4 class="border-space">Articles</h4>{% endif %}
-				{% for i in latest.0.list_toc.Article %}
+				{% if toc.Article %}<h4 class="border-space">Articles</h4>{% endif %}
+				{% for i in toc.Article %}
 					<a href="{{ i.0.get_absolute_url }}" class="static_a_display">
-						<strong> {{ i.0 }} </strong>
+						<strong> {{ i.0 }} </strong> <span class="pull-right"><em>{{ i.3 }}</em></span>
 						<p class="small">{% for j in i.1%} <em>{{ j }}{% if not forloop.last %}; {% endif %}</em> {% endfor %}</p>
 					</a>
 				{% endfor %}
 			</div>
 
 			<div class="col-md-6">						
-				{% if latest.0.list_toc.Column %}<h4 class="border-space">Columns</h4>{% endif %}
-				{% for i in latest.0.list_toc.Column %}
+				{% if toc.Column %}<h4 class="border-space">Columns</h4>{% endif %}
+				{% for i in toc.Column %}
 					<a href="{{ i.0.get_absolute_url }}" class="static_a_display">
-						<strong> {{ i.0 }} </strong>
+						<strong> {{ i.0 }} </strong> <span class="pull-right"><em>{{ i.3 }}</em></span>
 						<p class="small">{% for j in i.1%} <em>{{ j }}{% if not forloop.last %}; {% endif %}</em> {% endfor %}</p>
 					</a>
 				{% endfor %}
 				
-				{% if latest.0.list_toc.Review %}<h4 class="border-space">Reviews</h4>{% endif %}
-				{% for i in latest.0.list_toc.Review %}
+				{% if toc.Review %}<h4 class="border-space">Reviews</h4>{% endif %}
+				{% for i in toc.Review %}
 					<a href="{{ i.0.get_absolute_url }}" class="static_a_display">
-						<strong> {{ i.0 }} </strong>
+						<strong> {{ i.0 }} </strong> <span class="pull-right"><em>{{ i.3 }}</em></span>
 						<p class="small">{% for j in i.1%} <em>{{ j }}{% if not forloop.last %}; {% endif %}</em> {% endfor %}</p>
 					</a>
 				{% endfor %}
