@@ -4,7 +4,7 @@ from collections import Counter
 import urllib
 import urllib2
 
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import TemplateView, ListView, DetailView, CreateView
 from django.db.models import Q
@@ -23,6 +23,9 @@ from .forms import CreateSubscriberForm
 class HomeView(TemplateView):
     template_name = 'home.html'
     queryset = None
+
+    def get(self, request, *args, **kwargs):
+        return redirect('page_view', pk=15)
 
     def get_context_data(self, **kwargs):
         context = super(HomeView, self).get_context_data(**kwargs)
