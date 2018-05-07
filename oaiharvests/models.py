@@ -143,6 +143,7 @@ class Collection(TimeStampedModel):
         A type is but not limited to: ARTICLE, COLUMN, or REVIEW.
         Each record is a list with the following the format:
 
+        TODO: Modify each record item as dict by subtopic: <llt.topic> or 'BASIC': [REC OBJECT ...]
         {TYPE_NAME: [ [REC OBJECT, AUTHOR LIST, ABSTRACT TEXT, PAGE START], ... ]}
         """
         toc = defaultdict(list)
