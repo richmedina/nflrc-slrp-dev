@@ -32,47 +32,76 @@
 
 
 			<div class="col-md-6">
+				{% if toc.Preface %}<h4 class="border-space">&nbsp;</h4>{% endif %}
+				{% for sub_type, data in toc.Preface.items %} 
+					<strong>{{ sub_type }}</strong>
+					{% for doc in data.records %}
+						<div class="row">
+							<div class="col-md-11"> 
+								<a href="{{ doc.0.get_absolute_url }}" class="static_a_display">
+									<strong>{{ doc.0 }}</strong>
+									<p class="small">{% for j in doc.1%} <em>{{ j }}{% if not forloop.last %}; {% endif %}</em> {% endfor %}</p>
+								</a>
+							</div>
+							<div class="col-md-1"></div>
+						</div>
+					{% endfor %}
+				{% endfor %}
+
 				{% if toc.Article %}<h4 class="border-space">Articles</h4>{% endif %}
-				{% for i in toc.Article %}
-				<div class="row">
-					<div class="col-md-11">
-					<a href="{{ i.0.get_absolute_url }}" class="static_a_display">
-						<strong> {{ i.0 }} </strong> 
-						<p class="small">{% for j in i.1%} <em>{{ j }}{% if not forloop.last %}; {% endif %}</em> {% endfor %}</p>
-					</a>
-					</div>
-					<div class="col-md-1"><em>{{ i.3 }}</em></div>
-				</div>
+				{% for sub_type, data in toc.Article.items %} 
+					<strong>{{ sub_type }}</strong>
+					<p class="small">{% if data.editors %}Edited by{% endif %} {% for j in data.editors%} <em>{{ j }}{% if not forloop.last %}; {% endif %}</em> {% endfor %}</p>
+					{% for doc in data.records %}
+						<div class="row">
+							<div class="col-md-11"> 
+								<a href="{{ doc.0.get_absolute_url }}" class="static_a_display">
+									<strong>{{ doc.0 }}</strong>
+									<p class="small">{% for j in doc.1%} <em>{{ j }}{% if not forloop.last %}; {% endif %}</em> {% endfor %}</p>
+								</a>
+							</div>
+							<div class="col-md-1"><em>{{ doc.3 }}</em></div>
+						</div>
+					{% endfor %}
 				{% endfor %}
 			</div>
-
-			<div class="col-md-6">						
+			<div class="col-md-6">
 				{% if toc.Column %}<h4 class="border-space">Columns</h4>{% endif %}
-				{% for i in toc.Column %}
-				<div class="row">
-					<div class="col-md-11">
-					<a href="{{ i.0.get_absolute_url }}" class="static_a_display">
-						<strong> {{ i.0 }} </strong>
-						<p class="small">{% for j in i.1%} <em>{{ j }}{% if not forloop.last %}; {% endif %}</em> {% endfor %}</p>
-					</a>
-					</div>
-					<div class="col-md-1"><em>{{ i.3 }}</em></div>
-				</div>
+				{% for sub_type, data in toc.Column.items %} 
+					<strong>{{ sub_type }}</strong>
+					<p class="small">{% if data.editors %}Edited by{% endif %} {% for j in data.editors%} <em>{{ j }}{% if not forloop.last %}; {% endif %}</em> {% endfor %}</p>
+					{% for doc in data.records %}
+						<div class="row">
+							<div class="col-md-11"> 
+								<a href="{{ doc.0.get_absolute_url }}" class="static_a_display">
+									<strong>{{ doc.0 }}</strong>
+									<p class="small">{% for j in doc.1%} <em>{{ j }}{% if not forloop.last %}; {% endif %}</em> {% endfor %}</p>
+								</a>
+							</div>
+							<div class="col-md-1"><em>{{ doc.3 }}</em></div>
+						</div>
+					{% endfor %}
 				{% endfor %}
-				
+
+
+			
 				{% if toc.Review %}<h4 class="border-space">Reviews</h4>{% endif %}
-				{% for i in toc.Review %}
-				<div class="row">
-					<div class="col-md-11">
-					<a href="{{ i.0.get_absolute_url }}" class="static_a_display">
-						<strong> {{ i.0 }} </strong>
-						<p class="small">{% for j in i.1%} <em>{{ j }}{% if not forloop.last %}; {% endif %}</em> {% endfor %}</p>
-					</a>
-					</div>
-					<div class="col-md-1"><em>{{ i.3 }}</em></div>
-				</div>
+				{% for sub_type, data in toc.Review.items %}
+					<strong>{{ sub_type }}</strong>
+					<p class="small">{% if data.editors %}Edited by{% endif %} {% for j in data.editors%} <em>{{ j }}{% if not forloop.last %}; {% endif %}</em> {% endfor %}</p>
+					{% for doc in data.records %}
+						<div class="row">
+							<div class="col-md-11"> 
+								<a href="{{ doc.0.get_absolute_url }}" class="static_a_display">
+									<strong>{{ doc.0 }}</strong>
+									<p class="small">{% for j in doc.1%} <em>{{ j }}{% if not forloop.last %}; {% endif %}</em> {% endfor %}</p>
+								</a>
+							</div>
+							<div class="col-md-1"><em>{{ doc.3 }}</em></div>
+						</div>
+					{% endfor %}
 				{% endfor %}
-			</div>		
+			</div>	
 		</div>
 
 

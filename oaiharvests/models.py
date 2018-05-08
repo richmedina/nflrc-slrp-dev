@@ -140,42 +140,77 @@ class Collection(TimeStampedModel):
 
     def list_toc_by_page(self):
         """Returns a dictionary that groups record objects by type of record.
-        A type is but not limited to: ARTICLE, COLUMN, or REVIEW.
+        A type is but not limited to: FRONT MATTER, ARTICLE, COLUMN, or REVIEW.
         Each record is a list with the following the format:
 
         TODO: Modify each record item as dict by subtopic: <llt.topic> or 'BASIC': [REC OBJECT ...]
         {TYPE_NAME: [ [REC OBJECT, AUTHOR LIST, ABSTRACT TEXT, PAGE START], ... ]}
         """
-        toc = defaultdict(list)
+        # toc = defaultdict(list)
+        toc = {}
         for rec in self.list_records_by_page_and_volume():  # Returns a list of [ [REC OBJ, PAGE START, PAGE END, VOL NUM], ... ]
             rec_obj = rec[0]       # Record object
             rec_data = rec_obj.as_dict()  # Fetch the record data
-
+            # print rec, rec_data['type'], rec_data['llt.topic'] or None
             try:
                 for rec_type in rec_data['type']:
                     toc_item = [rec_obj, [], [], '']  # Set defaults (rec object, authors, abstract, start page)
+                    
+                    # Build author list 
                     try:
                         authors = rec_data['contributor.author'] # Pretty print author list
                         authors = [k.split(',')[1] + ' ' + k.split(',')[0] for k in authors]
                         toc_item[1] = authors
                     except:
                         pass  # Problem parsing authors but default already set to empty.
+                    
+                    # Build editor list
+                    try:
+                        editors = rec_data['contributor.editor'] # Pretty print editor list                        
+                    except:
+                        editors = []  # Problem parsing editors but default already set to empty.
+
+                    # Add abstract text 
                     try:
                         toc_item[2] = rec_data['description.abstract']
                     except:
                         pass  # Problem fetching abstract but default already set to empty.
                     
-                    if rec[1]: toc_item[3] = rec[1]  # Fetch page number from list if not zero
+                    # Fetch page number from list if not zero
+                    if rec[1]: toc_item[3] = rec[1]  
+
+                    # Get subtopic (llt.topic)
+                    try:
+                        rec_subtype = rec_data['llt.topic'][0]
+                    except:
+                        rec_subtype = ''
+
 
                     # Group according to record type...
                     try:
-                        toc[rec_type].append(toc_item)
+                        toc[rec_type]
                     except KeyError:
-                        toc[rec_type] = []
-                        toc[rec_type].append(toc_item)
-                    # print toc_item
-            except:
+                        toc[rec_type] = {}
+                    
+                    try:
+                        toc[rec_type][rec_subtype]['records'].append(toc_item)
+                        editor_set = toc[rec_type][rec_subtype]['editors']
+                        editor_set.set(editor_set.extend(editors))
+                        toc[rec_type][rec_subtype]['editors'] = list(editor_set)
+                    except KeyError:
+                        toc[rec_type][rec_subtype] = {'editors': [], 'records': []}
+                        toc[rec_type][rec_subtype]['editors'].extend(editors)
+                        toc[rec_type][rec_subtype]['records'].append(toc_item)
+
+                    
+                        
+            except Exception as e:
                 pass  # record must not have a type specified so proceed quietly
+        
+        # for i, j in toc.items():
+        #     print i
+        #     for k, v in j.items():
+        #         print '\t', k, len(v)
         
         return toc
 
