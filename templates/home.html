@@ -27,7 +27,7 @@
 	<div class="col-md-9">
 		<div class="row">
 			<div class="col-md-12">
-				<h3><a href="{% url 'collection' latest.identifier %}" class="static_a_display" style="color: #000">{{ latest.name }} <sup><span class="badge">newest</span></sup></a></h3>
+				<h3><a href="{% url 'collection' latest.identifier %}" class="static_a_display" style="color: #000">{{ latest.name }} <sup><span class="badge">newest</span></sup></a> {% if user.is_staff %}<small><a class="btn btn-xs btn-default" href="{% url 'oai_collection' latest.pk %}">Update</a></small>{% endif %}</h3>
 			</div>
 
 
@@ -37,13 +37,13 @@
 					<strong>{{ sub_type }}</strong>
 					{% for doc in data.records %}
 						<div class="row">
-							<div class="col-md-11"> 
+							<div class="{% if sub_type %}col-md-9 col-md-offset-1 {% else %}col-md-11{% endif %}"> 
 								<a href="{{ doc.0.get_absolute_url }}" class="static_a_display">
 									<strong>{{ doc.0 }}</strong>
 									<p class="small">{% for j in doc.1%} <em>{{ j }}{% if not forloop.last %}; {% endif %}</em> {% endfor %}</p>
 								</a>
 							</div>
-							<div class="col-md-1"></div>
+							<div class="col-md-1 {% if sub_type %}col-md-push-1{% endif %}"></div>
 						</div>
 					{% endfor %}
 				{% endfor %}
@@ -54,13 +54,13 @@
 					<p class="small">{% if data.editors %}Edited by{% endif %} {% for j in data.editors%} <em>{{ j }}{% if not forloop.last %}; {% endif %}</em> {% endfor %}</p>
 					{% for doc in data.records %}
 						<div class="row">
-							<div class="col-md-11"> 
+							<div class="{% if sub_type %}col-md-9 col-md-offset-1 {% else %}col-md-11{% endif %}"> 
 								<a href="{{ doc.0.get_absolute_url }}" class="static_a_display">
 									<strong>{{ doc.0 }}</strong>
 									<p class="small">{% for j in doc.1%} <em>{{ j }}{% if not forloop.last %}; {% endif %}</em> {% endfor %}</p>
 								</a>
 							</div>
-							<div class="col-md-1"><em>{{ doc.3 }}</em></div>
+							<div class="col-md-1 {% if sub_type %}col-md-push-1{% endif %}"><em>{{ doc.3 }}</em></div>
 						</div>
 					{% endfor %}
 				{% endfor %}
@@ -72,13 +72,13 @@
 					<p class="small">{% if data.editors %}Edited by{% endif %} {% for j in data.editors%} <em>{{ j }}{% if not forloop.last %}; {% endif %}</em> {% endfor %}</p>
 					{% for doc in data.records %}
 						<div class="row">
-							<div class="col-md-11"> 
+							<div class="{% if sub_type %}col-md-9 col-md-offset-1 {% else %}col-md-11{% endif %}"> 
 								<a href="{{ doc.0.get_absolute_url }}" class="static_a_display">
 									<strong>{{ doc.0 }}</strong>
 									<p class="small">{% for j in doc.1%} <em>{{ j }}{% if not forloop.last %}; {% endif %}</em> {% endfor %}</p>
 								</a>
 							</div>
-							<div class="col-md-1"><em>{{ doc.3 }}</em></div>
+							<div class="col-md-1 col-md-push-1 {% if sub_type %}col-md-push-1{% endif %}"><em>{{ doc.3 }}</em></div>
 						</div>
 					{% endfor %}
 				{% endfor %}
@@ -91,13 +91,13 @@
 					<p class="small">{% if data.editors %}Edited by{% endif %} {% for j in data.editors%} <em>{{ j }}{% if not forloop.last %}; {% endif %}</em> {% endfor %}</p>
 					{% for doc in data.records %}
 						<div class="row">
-							<div class="col-md-11"> 
+							<div class="{% if sub_type %}col-md-9 col-md-offset-1 {% else %}col-md-11{% endif %}"> 
 								<a href="{{ doc.0.get_absolute_url }}" class="static_a_display">
 									<strong>{{ doc.0 }}</strong>
 									<p class="small">{% for j in doc.1%} <em>{{ j }}{% if not forloop.last %}; {% endif %}</em> {% endfor %}</p>
 								</a>
 							</div>
-							<div class="col-md-1"><em>{{ doc.3 }}</em></div>
+							<div class="col-md-1 {% if sub_type %}col-md-push-1{% endif %}"><em>{{ doc.3 }}</em></div>
 						</div>
 					{% endfor %}
 				{% endfor %}
