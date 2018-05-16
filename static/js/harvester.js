@@ -15,6 +15,18 @@ jQuery(function($) {
 		});	
 	});
 
+	$("#harvest_btn").click(function() {
 
-	$(document).ready(function() {});
+		$('#modalwait').modal('show')
+		$.get("{% url 'oai_harvest_collection' object.identifier %}", function(data) {
+			console.log(data);
+			$('#modalwait').modal('hide')
+		});
+		// $("#spinwait").css("display", "inline");
+	});
+
+
+	$(document).ready(function() {
+		
+	});
 });

@@ -9,7 +9,7 @@ import pdb #pdb.set_trace()
 
 """Metadata element dispay sets"""
 
-TYPES = ['publisher', 'description.provenance', 'identifier.doi', 'title', 'bitstream', 'date.available', 'type.dcmi', 'relation.uri', 'identifier.citation', 'format.extent', 'description.abstract', 'date.accessioned', 'language.iso', 'relation.ispartofseries', 'identifier.issn', 'date.issued', 'identifier.uri', 'type', 'contributor.author', 'subject', 'volume', 'startingpage']
+TYPES = ['publisher', 'description.provenance', 'identifier.doi', 'title', 'bitstream', 'date.available', 'type.dcmi', 'relation.uri', 'identifier.citation', 'format.extent', 'description.abstract', 'date.accessioned', 'language.iso', 'relation.ispartofseries', 'identifier.issn', 'date.issued', 'identifier.uri', 'type', 'contributor.author', 'subject', 'volume', 'startingpage', 'llt.topic']
 
 DISPLAY_TYPE_ORDER = ['title', 'contributor.author', 'description.abstract', 'bitstream', 'bitstream_txt', 'subject', 'publisher', 'type', 'relation.ispartofseries', 'date.issued', 'identifier.doi', 'identifier.uri', 'identifier.citation', 'volume', 'startingpage', 'endingpage']
 
@@ -86,6 +86,7 @@ class Collection(TimeStampedModel):
     identifier = models.CharField(primary_key=True, max_length=256)
     name = models.CharField(max_length=256, blank=True)
     community = models.ForeignKey(Community, null=True, blank=True)
+    last_harvest = models.DateTimeField(auto_now=True)
 
     def count_records(self):
         return self.record_set.all().count()

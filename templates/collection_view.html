@@ -6,7 +6,7 @@
 {% block page_header %}
 <h4><i class="fa fa-caret-left"></i> <a href="{% url 'home' %}" class="static_a_display">Volumes</a></h4>
 
-<h2>{{ object }}</h2>
+<h2>{{ object }} {% if user.is_staff %}<small><a class="btn btn-xs btn-default" href="{% url 'oai_harvest_collection' object.pk %}">Update</a></small>{% endif %}</h2>
 {% endblock page_header %}
 
 {% block content %}	
@@ -39,6 +39,7 @@
 							<a href="{{ doc.0.get_absolute_url }}" class="static_a_display">
 								<strong>{{ doc.0 }}</strong>
 								<p class="small">{% for j in doc.1%} <em>{{ j }}{% if not forloop.last %}; {% endif %}</em> {% endfor %}</p>
+								<p class="small">{{ doc.2.0 }} </p>
 							</a>
 						</div>
 						<div class="col-md-1"><em>{{ doc.3 }}</em></div>
@@ -57,6 +58,7 @@
 							<a href="{{ doc.0.get_absolute_url }}" class="static_a_display">
 								<strong>{{ doc.0 }}</strong>
 								<p class="small">{% for j in doc.1%} <em>{{ j }}{% if not forloop.last %}; {% endif %}</em> {% endfor %}</p>
+								<p class="small">{{ doc.2.0 }} </p>
 							</a>
 						</div>
 						<div class="col-md-1"><em>{{ doc.3 }}</em></div>
@@ -76,6 +78,7 @@
 							<a href="{{ doc.0.get_absolute_url }}" class="static_a_display">
 								<strong>{{ doc.0 }}</strong>
 								<p class="small">{% for j in doc.1%} <em>{{ j }}{% if not forloop.last %}; {% endif %}</em> {% endfor %}</p>
+								<p class="small">{{ doc.2.0 }} </p>
 							</a>
 						</div>
 						<div class="col-md-1"><em>{{ doc.3 }}</em></div>

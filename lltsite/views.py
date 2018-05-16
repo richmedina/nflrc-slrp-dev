@@ -24,8 +24,8 @@ class HomeView(TemplateView):
     template_name = 'home.html'
     queryset = None
 
-    def get(self, request, *args, **kwargs):
-        return redirect('page_view', pk=15)
+    # def get(self, request, *args, **kwargs):
+    #     return redirect('page_view', pk=15)
 
     def get_context_data(self, **kwargs):
         context = super(HomeView, self).get_context_data(**kwargs)

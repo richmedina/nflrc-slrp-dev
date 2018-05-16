@@ -208,20 +208,22 @@ class OAIUtils(object):
         Utilizes OAI-PMH verbs: ListIdentifiers and ListSets
         """
         sickle = Sickle(community.repository.base_url)
+        
         # Retrieve collections associated with community parameter
         record_headers = sickle.ListIdentifiers(metadataPrefix='oai_dc', set=community.identifier)
-        
+
         # Filter record headers to build collection map from the community
         community_collections = {}  
         for i in record_headers:
             # Iterate over associated sets looking for collections 
             for j in i.setSpecs:     
                 if j[:3] == 'col':
-                    community_collections[j] = None  # register id in map
+                    community_collections[j] = None  # register collection id in map
 
-        # Map names to ids in collection map {setSpec: setName}         
+        # Map names to ids in collection map {setSpec: setName}
+        # listsets oai request returns the 'setName' of the collection in metadata...       
         for i in sickle.ListSets():
-            if i.setSpec in community_collections:
+            if i.setSpec in community_collections: # checks for a mapped collection identifier
                 community_collections[i.setSpec] = i.setName
 
         # Convert map to list of tuples

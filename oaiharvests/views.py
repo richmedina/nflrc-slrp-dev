@@ -1,4 +1,4 @@
-from django.shortcuts import render, render_to_response
+from django.shortcuts import render, render_to_response, get_object_or_404, redirect
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.utils import timezone, dateparse
@@ -144,7 +144,8 @@ class OaiCollectionView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(OaiCollectionView, self).get_context_data(**kwargs)
-        context['num_records'] = self.get_object().count_records()       
+        context['num_records'] = self.get_object().count_records()
+        context['records'] = self.get_object().record_set.all()
         return context
 
 
@@ -217,68 +218,13 @@ class OaiCollectionDeleteView(DeleteView):
 class OaiCollectionHarvestView(DetailView):
     model = Collection
     template_name = 'oai_collection_detail.html'
-    
-    def get_context_data(self, **kwargs):
-        context = super(
-            OaiCollectionHarvestView, self).get_context_data(**kwargs)
-        oai = OAIUtils()
+
+    def get(self, request, *args, **kwargs):
         collection = self.get_object()
         batch_harvest_articles(collection)
-        # repository = collection.community.repository
-        # records = oai.harvest_oai_collection_records_sickle(collection)
-
-        # for record in records:
-        #     # Read Header
-        #     repo_date = dateparse.parse_datetime(record.header.datestamp)
-        #     try:
-        #         record_obj = Record.objects.get(identifier=record.header.identifier)            
-        #         record_obj.remove_data()
-        #         record_obj.hdr_datestamp = repo_date
-
-        #     except:
-        #         record_obj = Record()
-        #         record_obj.identifier = record.header.identifier
-        #         record_obj.hdr_datestamp = repo_date
-        #         record_obj.hdr_setSpec = collection
-            
-        #     record_obj.save()
-
-        #     # Read Metadata
-        #     dataelements = record.metadata
-        #     for key in dataelements:
-        #         element = MetadataElement()
-        #         element.record = record_obj
-        #         element.element_type = key
-        #         data = dataelements[key]
-        #         element.element_data = json.dumps(data)
-        #         element.save()
-
-        #     #  Add in bitstream urls
-        #     bitstreams = get_bitstream_url(collection, record)
-        #     element = MetadataElement()
-        #     element.record = record_obj
-        #     element.element_type = 'bitstream'
-        #     element.element_data = json.dumps([bitstreams['bitstream']])
-        #     element.save()
-
-        #     element = MetadataElement()
-        #     element.record = record_obj
-        #     element.element_type = 'bitstream_txt'
-        #     element.element_data = json.dumps([bitstreams['bitstream_txt']])
-        #     element.save()
-
-
-
-        #     # old bitstream retrieval
-        #     # element = MetadataElement()
-        #     # element.record = record_obj
-        #     # element.element_type = 'bitstream'
-        #     # element.element_data = json.dumps([get_bitstream_url(collection, record)])
-        #     # element.save()
-
-        context['records'] = self.get_object().record_set.all()
-        context['num_records'] = self.get_object().count_records()
-        return context
+        collection.save()
+        # return redirect('oai_collection', pk=collection.pk)
+        return HttpResponse('OK')
 
 # http://scholarspace.manoa.hawaii.edu/dspace-oai/request?verb=GetRecord&identifier=oai:scholarspace.manoa.hawaii.edu:10125/24502&metadataPrefix=oai_dc
 
