@@ -147,8 +147,9 @@ class Collection(TimeStampedModel):
         TODO: Modify each record item as dict by subtopic: <llt.topic> or 'BASIC': [REC OBJECT ...]
         {TYPE_NAME: [ [REC OBJECT, AUTHOR LIST, ABSTRACT TEXT, PAGE START], ... ]}
         """
-        # toc = defaultdict(list)
-        toc = {}
+        toc = defaultdict()
+        # toc = {}
+
         for rec in self.list_records_by_page_and_volume():  # Returns a list of [ [REC OBJ, PAGE START, PAGE END, VOL NUM], ... ]
             rec_obj = rec[0]       # Record object
             rec_data = rec_obj.as_dict()  # Fetch the record data
@@ -186,12 +187,11 @@ class Collection(TimeStampedModel):
                     except:
                         rec_subtype = ''
 
-
                     # Group according to record type...
                     try:
                         toc[rec_type]
                     except KeyError:
-                        toc[rec_type] = {}
+                        toc[rec_type] = OrderedDict()
                     
                     try:
                         toc[rec_type][rec_subtype]['records'].append(toc_item)
@@ -202,8 +202,6 @@ class Collection(TimeStampedModel):
                         toc[rec_type][rec_subtype] = {'editors': [], 'records': []}
                         toc[rec_type][rec_subtype]['editors'].extend(editors)
                         toc[rec_type][rec_subtype]['records'].append(toc_item)
-
-                    
                         
             except Exception as e:
                 pass  # record must not have a type specified so proceed quietly

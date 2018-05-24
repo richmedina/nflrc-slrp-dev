@@ -39,7 +39,7 @@
 							<a href="{{ doc.0.get_absolute_url }}" class="static_a_display">
 								<strong>{{ doc.0 }}</strong>
 								<p class="small">{% for j in doc.1%} <em>{{ j }}{% if not forloop.last %}; {% endif %}</em> {% endfor %}</p>
-								<p class="small">{{ doc.2.0 }} </p>
+								<p class="small">{{ doc.2.0|truncatewords:20|truncatewords:20 }} </p>
 							</a>
 						</div>
 						<div class="col-md-1 {% if sub_type %}col-md-push-1{% endif %}"><em>{{ doc.3 }}</em></div>
@@ -58,7 +58,7 @@
 							<a href="{{ doc.0.get_absolute_url }}" class="static_a_display">
 								<strong>{{ doc.0 }}</strong>
 								<p class="small">{% for j in doc.1%} <em>{{ j }}{% if not forloop.last %}; {% endif %}</em> {% endfor %}</p>
-								<p class="small">{{ doc.2.0 }} </p>
+								<p class="small">{{ doc.2.0|truncatewords:20 }} </p>
 							</a>
 						</div>
 						<div class="col-md-1 {% if sub_type %}col-md-push-1{% endif %}"><em>{{ doc.3 }}</em></div>
@@ -78,7 +78,7 @@
 							<a href="{{ doc.0.get_absolute_url }}" class="static_a_display">
 								<strong>{{ doc.0 }}</strong>
 								<p class="small">{% for j in doc.1%} <em>{{ j }}{% if not forloop.last %}; {% endif %}</em> {% endfor %}</p>
-								<p class="small">{{ doc.2.0 }} </p>
+								<p class="small">{{ doc.2.0|truncatewords:20 }} </p>
 							</a>
 						</div>
 						<div class="col-md-1 {% if sub_type %}col-md-push-1{% endif %}"><em>{{ doc.3 }}</em></div>
