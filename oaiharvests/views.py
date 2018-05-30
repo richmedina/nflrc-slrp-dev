@@ -138,6 +138,7 @@ class OaiCommunityHarvestView(DetailView):
         context['collections'] = community.list_collections()
         return context
 
+
 class OaiCollectionView(DetailView):
     model = Collection
     template_name = 'oai_collection_detail.html'
