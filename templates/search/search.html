@@ -21,13 +21,13 @@
 
     <div class="col-md-10 col-md-offset-1" style="padding-top: 10px">
         <ul class="nav nav-pills">
-            <li><a href="#keylist" class="btn btn-xs btn-default static_a_display filter-btn" data-toggle="collapse"> <i class="fa fa-caret-down"></i> Browse by keyword?</a></li>
-            <li><a href="#authorlist" class="btn btn-xs btn-default static_a_display filter-btn" data-toggle="collapse"> <i class="fa fa-caret-down"></i> Browse by author?</a></li>
+            <li><a href="#keylist" class="btn btn-xs btn-default static_a_display filter-btn" data-toggle="collapse"> <i class="fa fa-caret-down"></i> <strong>Browse by keyword?</strong></a></li>
+            <li><a href="#authorlist" class="btn btn-xs btn-default static_a_display filter-btn" data-toggle="collapse"> <i class="fa fa-caret-down"></i> <strong>Browse by author?</strong></a></li>
         </ul>        
         
         <!--keyword listing -->
         <p>
-            <div id="keylist" class="row well collapse{% if not query %}-in{% endif %} filter-terms" style="background-color: #fff">
+            <div id="keylist" class="row well collapse filter-terms" style="background-color: #fff">
                 {% for i in keytable %}
                     <div class="col-md-3 text-left">
                         <ul class="list-unstyled center-block">
