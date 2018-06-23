@@ -62,7 +62,7 @@ urlpatterns = [
     url(r'^item-detail/(?P<pk>\w+)$',
      ItemViewFull.as_view(), name='item_full'),
 
-    url(r'^page/(?P<pk>\w+)$',
+    url(r'^page/(?P<pk>\d+)/$',
      PageView.as_view(), name='page_view'),
 
     url(r'^keys/$',
@@ -75,7 +75,8 @@ urlpatterns = [
        SearchHaystackView.as_view(), name='haystack_search'),
 
     url(r'^subscribe/$',
-       SubscriberCreateView.as_view(), name='subscribe'),
+       SubscriberCreateView.as_view(), name='subscribe'),    
+
 
     # url(r'^searchtest/$',
     #    SearchPage.as_view(), name='searchtest'),
@@ -135,4 +136,8 @@ urlpatterns = [
     url(r'^admin/filebrowser/', include(site.urls)),
     url(r'^grappelli/', include('grappelli.urls')), # grappelli URLS
     url(r'^admin/', include(admin.site.urls), name='index'),
+
+    url(r'^(?P<slug>[-\w]+)/$',
+     PageView.as_view(), name='page_slug_view'),
+
 ]

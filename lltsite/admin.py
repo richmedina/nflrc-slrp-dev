@@ -10,7 +10,8 @@ class ExtraMedia:
     ]
 
 class StoryPageAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'title', 'featured', 'get_absolute_url')
+    list_display = ('pk', 'title', 'featured', 'get_absolute_url', 'slug')
+    list_editable = ('slug',)
     list_display_links = ('pk',)
 
 admin.site.register(StoryPage, StoryPageAdmin, Media = ExtraMedia)

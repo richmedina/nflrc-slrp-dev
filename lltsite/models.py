@@ -22,6 +22,7 @@ class StoryPage(TimeStampedModel):
         max_length=512, blank=True, null=True, default='')
     # tags = generic.GenericRelation(TaggedItem)
     private = models.BooleanField(default=False, blank=True, help_text='checking this ON will require a user to login to view this story')
+    slug = models.SlugField(max_length=255, null=True, blank=True)
 
     def get_absolute_url(self):
         return reverse('page_view', args=[str(self.id)])
