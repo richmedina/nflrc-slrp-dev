@@ -1,14 +1,15 @@
 # changelog.md
 
-## [1.0.0] - 2018-06-23
+## [1.0.0] - 2018-06-25
 
 ### Added
-- created human readable urls (slugs) for site pages (not journal papers yet)
+- added human readable urls (slugs) for site pages (not journal papers yet)
 - added link to 2017 annual report (some reports are not available yet.)
 
 ### Changed
 - adjusted JCR rankings in about page made consistent (8/180 in ling and 26/235 in ed)
 - adjusted link from an issue page back to previous issues listing instead of home page.
+- adjusted editor listings to show first then last name
 
 ## [1.0.0] - 2018-06-14
 
