@@ -88,6 +88,19 @@ class Collection(TimeStampedModel):
     community = models.ForeignKey(Community, null=True, blank=True)
     last_harvest = models.DateTimeField(auto_now=True)
 
+    def title_tuple(self):
+        """Parses name of collection to enumerate 'special issue' titles if they exist.
+        """
+        q = 'special issue'
+        title = (self.name, '')
+        pos = self.name.lower().find(q)
+        if pos >= 0:
+            a = self.name[:pos].strip()
+            b = self.name[pos:]
+            title = (a, b)
+            
+        return title
+
     def count_records(self):
         return self.record_set.all().count()
 

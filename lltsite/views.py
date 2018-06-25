@@ -78,6 +78,7 @@ class CollectionView(DetailView):
         context = super(CollectionView, self).get_context_data(**kwargs)
         context['toc'] = self.get_object().list_toc_by_page()
         context['size'] = len(context['toc'])
+        context['title'] = self.get_object().title_tuple()
         return context
 
 
