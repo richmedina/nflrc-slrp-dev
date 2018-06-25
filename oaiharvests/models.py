@@ -173,7 +173,7 @@ class Collection(TimeStampedModel):
                     
                     # Build author list 
                     try:
-                        authors = rec_data['contributor.author'] # Pretty print author list
+                        authors = rec_data['contributor.author'] # Pretty print author list (first, last)
                         authors = [k.split(',')[1] + ' ' + k.split(',')[0] for k in authors]
                         toc_item[1] = authors
                     except:
@@ -181,9 +181,10 @@ class Collection(TimeStampedModel):
                     
                     # Build editor list
                     try:
-                        editors = rec_data['contributor.editor'] # Pretty print editor list                        
+                        editors = rec_data['contributor.editor'] # Pretty print editor list (first, last)
+                        editors = [k.split(',')[1] + ' ' + k.split(',')[0] for k in editors]                    
                     except:
-                        editors = []  # Problem parsing editors but default already set to empty.
+                        editors = []  # Problem parsing editors, set to empty.
 
                     # Add abstract text 
                     try:
@@ -218,11 +219,6 @@ class Collection(TimeStampedModel):
                         
             except Exception as e:
                 pass  # record must not have a type specified so proceed quietly
-        
-        # for i, j in toc.items():
-        #     print i
-        #     for k, v in j.items():
-        #         print '\t', k, len(v)
         
         return toc
 
