@@ -18,6 +18,7 @@ from lltsite.views import (
     KeywordBrowseView,
     SearchHaystackView,
     SubscriberCreateView,
+    UpdateImpactFactorView
 )
 
 from oaiharvests.views import (
@@ -77,6 +78,8 @@ urlpatterns = [
     url(r'^subscribe/$',
        SubscriberCreateView.as_view(), name='subscribe'),    
 
+    url(r'^update-impact-factor/(?P<pk>\w+)$',
+       UpdateImpactFactorView.as_view(), name='update_factor'),    
 
     # url(r'^searchtest/$',
     #    SearchPage.as_view(), name='searchtest'),

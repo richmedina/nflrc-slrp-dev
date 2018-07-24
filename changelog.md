@@ -1,5 +1,14 @@
 # changelog.md
 
+## [1.0.0] - 2018-07-24
+
+### Added
+- db field for storing current impact factor
+- form for editing impact factor
+
+### Changed
+- updated impact factor for 2017 on /about
+
 ## [1.0.0] - 2018-06-25
 
 ### Added
@@ -13,12 +22,8 @@
 
 ## [1.0.0] - 2018-06-14
 
-### Added
-
 ### Changed
 - adjusted visibility of filter buttons on search page
-
-### Removed
 
 ## [1.0.0] - 2018-06-01
 
@@ -27,8 +32,4 @@
 
 ## Todo
 
-- add slugs for site pages
-
 - online journal Kairos and noticed that they list "Editorial Board Alumni" below their current Editorial Board
-
-- list column editor names in TOC with first name, last name

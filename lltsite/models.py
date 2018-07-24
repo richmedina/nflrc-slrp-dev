@@ -30,6 +30,7 @@ class StoryPage(TimeStampedModel):
     def __unicode__(self):
         return self.title
 
+
 class Subscriber(TimeStampedModel):
     email = models.EmailField(blank=False, unique=True)
     first_name = models.CharField(max_length=254, blank=False)
@@ -44,3 +45,9 @@ class Subscriber(TimeStampedModel):
     def __unicode__(self):
         return self.email
 
+
+class ImpactFactor(models.Model):
+    current_factor = models.DecimalField(max_digits=8, decimal_places=3)
+
+    def __unicode__(self):
+        return str(self.current_factor)

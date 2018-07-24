@@ -3,9 +3,13 @@ from django.forms import ModelForm, ValidationError
 from django import forms
 from django.contrib import messages
 
-from .models import Subscriber
+from .models import Subscriber, ImpactFactor
 
 
+class UpdateImpactFactorForm(ModelForm):
+    class Meta:
+        model = ImpactFactor
+        fields = ['current_factor']
 
 class CreateSubscriberForm(ModelForm):
 

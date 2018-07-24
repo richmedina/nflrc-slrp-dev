@@ -6,7 +6,7 @@ import urllib2
 
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
-from django.views.generic import TemplateView, ListView, DetailView, CreateView
+from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView
 from django.db.models import Q
 from django.contrib import messages
 from django.conf import settings
@@ -15,17 +15,14 @@ from braces.views import LoginRequiredMixin
 from haystack.generic_views import SearchView
 
 from oaiharvests.models import Community, Collection, Record, MetadataElement
-from .models import StoryPage, Subscriber
+from .models import StoryPage, Subscriber, ImpactFactor
 from .mixins import RecordSearchMixin
-from .forms import CreateSubscriberForm
+from .forms import CreateSubscriberForm, UpdateImpactFactorForm
 
 
 class HomeView(TemplateView):
     template_name = 'home.html'
     queryset = None
-
-    # def get(self, request, *args, **kwargs):
-    #     return redirect('page_view', pk=15)
 
     def get_context_data(self, **kwargs):
         context = super(HomeView, self).get_context_data(**kwargs)
@@ -34,7 +31,10 @@ class HomeView(TemplateView):
         context['volumes'] = journal.list_collections_by_volume()
         context['latest'] = Collection.objects.all().order_by('-name')[0]
         context['toc'] = context['latest'].list_toc_by_page()
-        # context['latest'] = [(vol, vol.list_records()) for vol in Collection.objects.all().order_by('-name')][0]
+        try:
+            context['impact_factor'] = ImpactFactor.objects.get()
+        except:
+            context['impact_factor'] = 0.00
         return context
 
 
@@ -214,6 +214,11 @@ class SubscriberCreateView(CreateView):
             messages.error(self.request, 'Invalid reCAPTCHA. Please try again.', extra_tags='danger')
             return super(SubscriberCreateView, self).form_invalid(form)     
 
-        
+
+class UpdateImpactFactorView(UpdateView):
+    model = ImpactFactor
+    template_name = 'impact_factor_update.html'
+    form_class = UpdateImpactFactorForm
+    success_url = reverse_lazy('home')   
 
 
