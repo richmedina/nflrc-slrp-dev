@@ -212,10 +212,14 @@ class SubscriberCreateView(CreateView):
             return super(SubscriberCreateView, self).form_valid(form)
         else:
             messages.error(self.request, 'Invalid reCAPTCHA. Please try again.', extra_tags='danger')
-            return super(SubscriberCreateView, self).form_invalid(form)     
+            return super(SubscriberCreateView, self).form_invalid(form)
+
+class SubscriberListView(LoginRequiredMixin, ListView):
+    model = Subscriber
+    template_name = 'subscriber_list.html'  
 
 
-class UpdateImpactFactorView(UpdateView):
+class UpdateImpactFactorView(LoginRequiredMixin, UpdateView):
     model = ImpactFactor
     template_name = 'impact_factor_update.html'
     form_class = UpdateImpactFactorForm

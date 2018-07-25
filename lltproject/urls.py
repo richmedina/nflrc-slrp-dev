@@ -18,6 +18,7 @@ from lltsite.views import (
     KeywordBrowseView,
     SearchHaystackView,
     SubscriberCreateView,
+    SubscriberListView,
     UpdateImpactFactorView
 )
 
@@ -76,7 +77,10 @@ urlpatterns = [
        SearchHaystackView.as_view(), name='haystack_search'),
 
     url(r'^subscribe/$',
-       SubscriberCreateView.as_view(), name='subscribe'),    
+       SubscriberCreateView.as_view(), name='subscribe'),
+
+    url(r'^subscribers/$',
+       SubscriberListView.as_view(), name='subscriber_list'),    
 
     url(r'^update-impact-factor/(?P<pk>\w+)$',
        UpdateImpactFactorView.as_view(), name='update_factor'),    
