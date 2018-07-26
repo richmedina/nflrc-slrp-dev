@@ -9,11 +9,12 @@
 {% block content %}
 <div class="row">
 	<div class="col-md-9">
-		<form>
-			<textarea>
-				{% for i in object_list %}{{ i }},{% endfor %}
-			</textarea>
-		</form>
+		{% for i in index %}
+		<a href="{% url 'subscriber_list' i %}">{{ i }}</a> 
+		{% endfor %}
+		
+		{% for i in object_list %}<p>{{ i.first_name }} {{ i.last_name }}  <strong>{{ i.email }}</strong></p>{% endfor %}
+		
 	</div>
 	<div class="col-md-3">{% include 'base-side-menu.html' %}</div>
 </div>		

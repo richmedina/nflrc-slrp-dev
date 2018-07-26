@@ -216,7 +216,16 @@ class SubscriberCreateView(CreateView):
 
 class SubscriberListView(LoginRequiredMixin, ListView):
     model = Subscriber
-    template_name = 'subscriber_list.html'  
+    template_name = 'subscriber_list.html'
+
+    def get_queryset(self):
+        index = self.kwargs['alpha_index']
+        return Subscriber.objects.filter(email__startswith=index)
+
+    def get_context_data(self, **kwargs):
+        context = super(SubscriberListView, self).get_context_data(**kwargs)
+        context['index'] = 'abcdefghijklmnopqrstuvwxyz'
+        return context
 
 
 class UpdateImpactFactorView(LoginRequiredMixin, UpdateView):
