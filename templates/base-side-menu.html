@@ -21,8 +21,8 @@
 		</ul>
 
 		<p><a href="{% url 'subscribe' %}" class="btn btn-sm btn-block bg-llt-gray">Subscribe</a></p>
-
 		<p><a href="{% url 'page_slug_view' 'contribute' %}" class="btn btn-sm btn-block bg-llt-gray">Donate</a></p>
+		<p>{% if request.user.is_staff %}<a href="{% url 'subscriber_list' 'a' %}" class="btn btn-sm btn-block bg-llt-gray">Manage Subscribers</a>{% endif %}</p>
 
 	</div>
 </div>
