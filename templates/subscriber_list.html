@@ -9,8 +9,9 @@
 {% block content %}
 <div class="row">
 	<div class="col-md-9">
+		<p><a href="{% url 'subscriber_list_csv' %}">Download subscriber list as a csv file.</a></p>
 		{% for i in index %}
-		<a href="{% url 'subscriber_list' i %}">{{ i }}</a> 
+			<a href="{% url 'subscriber_list' i %}">{{ i }}</a> 
 		{% endfor %}
 		
 		{% for i in object_list %}<p>{{ i.first_name }} {{ i.last_name }}  <strong>{{ i.email }}</strong></p>{% endfor %}

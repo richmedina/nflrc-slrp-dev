@@ -3,6 +3,8 @@ from operator import itemgetter
 from collections import Counter
 import urllib
 import urllib2
+import csv
+from datetime import datetime
 
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
@@ -10,6 +12,8 @@ from django.views.generic import TemplateView, ListView, DetailView, CreateView,
 from django.db.models import Q
 from django.contrib import messages
 from django.conf import settings
+from django.http import HttpResponse
+
 
 from braces.views import LoginRequiredMixin
 from haystack.generic_views import SearchView
@@ -220,12 +224,29 @@ class SubscriberListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         index = self.kwargs['alpha_index']
-        return Subscriber.objects.filter(email__startswith=index)
+        return Subscriber.objects.filter(email__istartswith=index)
 
     def get_context_data(self, **kwargs):
         context = super(SubscriberListView, self).get_context_data(**kwargs)
         context['index'] = 'abcdefghijklmnopqrstuvwxyz'
         return context
+
+
+class SubscriberListCsvView(LoginRequiredMixin, ListView):
+    model = Subscriber
+
+    def render_to_response(self, context, **response_kwargs):
+        daystr = datetime.now().strftime('%Y-%m-%d-%I_%M_%p ')
+        filename = 'llt-subscriber-list-' + daystr + '.csv'
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename=' + filename
+        writer = csv.writer(response)
+        # alternate format: writer = csv.writer(response, delimiter=' ')
+        for sub in context['object_list']:
+            writer.writerow([sub.email.encode('utf8'), sub.first_name.encode('utf8'), sub.last_name.encode('utf8')])
+
+
+        return response
 
 
 class UpdateImpactFactorView(LoginRequiredMixin, UpdateView):

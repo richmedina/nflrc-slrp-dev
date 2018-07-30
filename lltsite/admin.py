@@ -14,6 +14,11 @@ class StoryPageAdmin(admin.ModelAdmin):
     list_editable = ('slug',)
     list_display_links = ('pk',)
 
+class SubscriberListAdmin(admin.ModelAdmin):
+    list_display = ('pk', 'email', 'first_name', 'last_name')
+    list_editable = ('first_name', 'last_name')
+    search_fields = ['first_name', 'last_name', 'email']
+
 admin.site.register(StoryPage, StoryPageAdmin, Media = ExtraMedia)
-admin.site.register(Subscriber)
+admin.site.register(Subscriber, SubscriberListAdmin)
 admin.site.register(ImpactFactor)
