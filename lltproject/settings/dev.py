@@ -60,3 +60,12 @@ FILEBROWSER_VERSIONS = getattr(settings, "FILEBROWSER_VERSIONS", {
 })
 FILEBROWSER_CONVERT_FILENAME = getattr(settings, "FILEBROWSER_CONVERT_FILENAME", False)
 # END FILEBROWSER SETTINGS
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
+        'PATH': os.environ['WHOOSH_PATH'],
+    },
+}
+
+HAYSTACK_SEARCH_RESULTS_PER_PAGE = 1000
