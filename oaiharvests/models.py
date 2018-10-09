@@ -181,10 +181,14 @@ class Collection(TimeStampedModel):
                     
                     # Build editor list
                     try:
-                        editors = rec_data['contributor.editor'] # Pretty print editor list (first, last)
-                        editors = [k.split(',')[1] + ' ' + k.split(',')[0] for k in editors]                    
-                    except:
-                        editors = []  # Problem parsing editors, set to empty.
+                        editors = rec_data['contributor.editor'] # Pretty print editor list (first last)
+                        try:  # handle error related to metadata entry for first name, last name
+                            editors = [k.split(',')[1] + ' ' + k.split(',')[0] for k in editors]
+                        except:
+                            pass
+                    except Exception as e:
+                        editors = []  # Problem parsing editors, set to empty. 
+                        # Possible issue: Check that editor name is entered as <last name>, <first name> in metadata.
 
                     # Add abstract text 
                     try:
