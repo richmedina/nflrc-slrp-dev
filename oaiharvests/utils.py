@@ -223,8 +223,9 @@ class OAIUtils(object):
         # Map names to ids in collection map {setSpec: setName}
         # listsets oai request returns the 'setName' of the collection in metadata...       
         for i in sickle.ListSets():
-            if i.setSpec in community_collections: # checks for a mapped collection identifier
-                community_collections[i.setSpec] = i.setName
+            modstr = 'col' + i.setSpec[3:] # Bug in oai? in set results a 'collection' has a prefix of 'com'!
+            if modstr in community_collections: # checks for a mapped collection identifier
+                community_collections[modstr] = i.setName
 
         # Convert map to list of tuples
         self.collections = community_collections.items()
@@ -239,3 +240,36 @@ class OAIUtils(object):
         sickle.class_mapping['GetRecord'] = LltRecord
         records = sickle.ListRecords(metadataPrefix='dim', ignore_deleted=True, set=collection.identifier)
         return records
+
+
+    def test_list_oai_collections(self, community):
+        """ Constructs list of tuples of collections (a seconday grouping concept
+        in OAI) "owned" by the given community.
+        
+        Utilizes OAI-PMH verbs: ListIdentifiers and ListSets
+        """
+        sickle = Sickle(community.repository.base_url)
+        
+        # Retrieve collections associated with community parameter
+        record_headers = sickle.ListIdentifiers(metadataPrefix='oai_dc', set=community.identifier)
+        # Filter record headers to build collection map from the community
+        community_collections = {}  
+        for i in record_headers:
+            # Iterate over associated sets looking for collections 
+            for j in i.setSpecs:     
+                if j[:3] == 'col':
+                    community_collections[j] = None  # register collection id in map
+
+        # Map names to ids in collection map {setSpec: setName}
+        # listsets oai request returns the 'setName' of the collection in metadata...       
+        for i in sickle.ListSets():
+            modstr = 'col' + i.setSpec[3:] # Bug in oai? in set results a 'collection' has a prefix of 'com'!
+            if modstr in community_collections: # checks for a mapped collection identifier
+                community_collections[modstr] = i.setName
+
+        # Convert map to list of tuples
+        self.collections = community_collections.items()
+
+        # Sort collections by name
+        self.collections = sorted(self.collections, key=lambda i: i[1])
+        return self.collections
