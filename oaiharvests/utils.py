@@ -29,7 +29,7 @@ def filter_existing_collections(collections):
     collections_filtered = []
     cols = Collection.objects.all()
     for i in collections:
-        if not cols.filter(identifier=i[0]):
+        if not cols.filter(identifier='col_' + i[0]):
             collections_filtered.append(i)
     return collections_filtered
 
