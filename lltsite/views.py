@@ -218,6 +218,7 @@ class SubscriberCreateView(CreateView):
             messages.error(self.request, 'Invalid reCAPTCHA. Please try again.', extra_tags='danger')
             return super(SubscriberCreateView, self).form_invalid(form)
 
+
 class SubscriberListView(LoginRequiredMixin, ListView):
     model = Subscriber
     template_name = 'subscriber_list.html'

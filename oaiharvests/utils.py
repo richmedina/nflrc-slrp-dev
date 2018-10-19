@@ -218,12 +218,12 @@ class OAIUtils(object):
             # Iterate over associated sets looking for collections 
             for j in i.setSpecs:     
                 if j[:3] == 'col':
-                    community_collections[j] = None  # register collection id in map
+                    community_collections[j[4:]] = None  # register collection id excluding prefix in map
 
         # Map names to ids in collection map {setSpec: setName}
         # listsets oai request returns the 'setName' of the collection in metadata...       
         for i in sickle.ListSets():
-            modstr = 'col' + i.setSpec[3:] # Bug in oai? in set results a 'collection' has a prefix of 'com'!
+            modstr = i.setSpec[4:] # Bug in oai? in set results a 'collection' has a prefix of 'com'! Only processing identifier without col_ or com_ prefix
             if modstr in community_collections: # checks for a mapped collection identifier
                 community_collections[modstr] = i.setName
 

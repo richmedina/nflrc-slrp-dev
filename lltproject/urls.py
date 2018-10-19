@@ -59,10 +59,10 @@ urlpatterns = [
     url(r'^collection/(?P<pk>\w+)$',
      CollectionView.as_view(), name='collection'),
 
-    url(r'^item/(?P<pk>\w+)$',
+    url(r'^item/(?P<pk>\d+)$',
      ItemView.as_view(), name='item'),
 
-    url(r'^item-detail/(?P<pk>\w+)$',
+    url(r'^item-detail/(?P<pk>\d+)$',
      ItemViewFull.as_view(), name='item_full'),
 
     url(r'^page/(?P<pk>\d+)/$',
