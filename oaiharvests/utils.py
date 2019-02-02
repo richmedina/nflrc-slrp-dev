@@ -29,7 +29,7 @@ def filter_existing_collections(collections):
     collections_filtered = []
     cols = Collection.objects.all()
     for i in collections:
-        if not cols.filter(identifier='col_' + i[0]):
+        if not cols.filter(identifier=i[0]):
             collections_filtered.append(i)
     return collections_filtered
 
@@ -218,14 +218,13 @@ class OAIUtils(object):
             # Iterate over associated sets looking for collections 
             for j in i.setSpecs:     
                 if j[:3] == 'col':
-                    community_collections[j[4:]] = None  # register collection id excluding prefix in map
+                    community_collections[j] = None  # register collection id 
 
         # Map names to ids in collection map {setSpec: setName}
         # listsets oai request returns the 'setName' of the collection in metadata...       
         for i in sickle.ListSets():
-            modstr = i.setSpec[4:] # Bug in oai? in set results a 'collection' has a prefix of 'com'! Only processing identifier without col_ or com_ prefix
-            if modstr in community_collections: # checks for a mapped collection identifier
-                community_collections[modstr] = i.setName
+            if i.setSpec in community_collections: # checks for a mapped collection identifier                
+                community_collections[i.setSpec] = i.setName
 
         # Convert map to list of tuples
         self.collections = community_collections.items()
