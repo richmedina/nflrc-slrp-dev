@@ -34,6 +34,7 @@ class HomeView(TemplateView):
         context['keywords'] =  journal.aggregate_keywords()
         context['volumes'] = journal.list_collections_by_volume()
         context['latest'] = Collection.objects.all().order_by('-name')[0]
+        context['title'] = context['latest'].title_tuple()
         context['toc'] = context['latest'].list_toc_by_page()
         try:
             context['impact_factor'] = ImpactFactor.objects.get()
