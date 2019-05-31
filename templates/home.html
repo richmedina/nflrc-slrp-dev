@@ -133,7 +133,6 @@
 	</div>			
 
 	{% for num, volume in volumes.items %}
-		{% if not forloop.last %}
 		<div class="col-md-3">
 			<a class="static_a_display" data-toggle="collapse" href="#id-{{num}}-collapse">
 				<i class="fa fa-caret-right"></i> {{ volume.0.name|slice:":9"}}</a>
@@ -143,7 +142,6 @@
 			{% endfor %}
 			</ul>
 		</div>
-		{% endif %}
 	{% endfor %}					
 </div>
 	
