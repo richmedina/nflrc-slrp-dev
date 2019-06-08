@@ -3,7 +3,7 @@ from django.core.urlresolvers import reverse
 from model_utils.models import TimeStampedModel
 from collections import OrderedDict, defaultdict
 
-import json, operator
+import json, operator, os, requests, io
 import pdb #pdb.set_trace()
 
 
@@ -238,6 +238,7 @@ class Record(TimeStampedModel):
     identifier = models.CharField(max_length=256, unique=True)
     hdr_datestamp = models.DateTimeField()
     hdr_setSpec = models.ForeignKey(Collection)
+    full_text = models.TextField(default='')
 
     def remove_data(self):
         MetadataElement.objects.filter(record=self).delete()
@@ -324,6 +325,31 @@ class Record(TimeStampedModel):
             return authors
         except Exception as e:
             return []        
+
+    def load_full_text(self, local_dir=None):
+        url = None
+        meta_data = self.as_dict()
+        if local_dir:            
+            try:
+                bitstream_txt = meta_data.get('bitstream_txt')[0]
+                url = os.path.join(local_dir, bitstream_txt.split('/')[-1])
+                with io.open(url, 'r', encoding='utf8') as f:
+                    t = f.read()
+                    self.full_text = t.replace(u'\x00', '')
+                    self.save()
+            except Exception as e:
+                return (self.pk, url, e)
+        else:
+            try:
+                url = meta_data.get('bitstream_txt')[0]
+                url = url.replace('http://', 'https://')
+                r = requests.get(url, timeout=1.0)
+                self.full_text = r.text
+                self.save()
+            except Exception as e:
+                return (self.pk, url, e)
+        
+        return None
 
     def __unicode__(self):
         title = self.get_metadata_item('title')[0][0]

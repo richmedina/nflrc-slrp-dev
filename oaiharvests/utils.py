@@ -5,7 +5,11 @@ OAIUtils : A set of utility functions that handle requests and format responses 
 
 http://www.openarchives.org/OAI/openarchivesprotocol.html
 """
+import os
+import io
 import json
+import time
+import requests
 
 from django.utils import timezone, dateparse
 
@@ -127,7 +131,71 @@ def batch_harvest_issues(community_obj):
             col = Collection.objects.get(identifier=i[0])
         
         batch_harvest_articles(col)
+        time.sleep(5)
 
+def build_bitstream_txt_paths(records=None):
+    paths = []
+    errors = []
+    if not records:
+        records = LocalRecord.objects.all()
+    
+    for r in records:
+        rd = r.as_dict()
+        try:
+            if rd['collection'][0].identifier != 'col_10125_54598':
+                d = {'rec_obj': r,'title': rd['title'][0], 'bitstream_txt':rd['bitstream_txt'][0]}
+                paths.append(d)
+
+        except Exception as e:
+            print e
+            errors.append((r.pk, r.identifier, rd['title'][0], rd['volume'][0], rd['number']))
+    return (paths, errors)
+
+def batch_load_full_text(local_dir=None):
+    recs = LocalRecord.objects.all()
+    for rec in recs:
+        res = rec.load_full_text(local_dir)
+        if res:
+            print res
+        time.sleep(2)
+
+def download_full_text_files(data_dir=None):
+    if not data_dir: 
+        print 'data directory not specified'
+        return
+    
+    paths = build_bitstream_txt_paths()[0]
+    path_errs = []
+    for i, p in enumerate(paths):    
+        file_name = None
+        url = None        
+
+        try:
+            url = p.get('bitstream_txt')
+            url = url.replace('http://', 'https://')
+            file_name = url.split('/')[-1]
+            file_name = os.path.join(data_dir, file_name)
+        except Exception as e:
+            path_errs.append(('URL ERROR', i, url, file_name))
+            print i, 'URL ERROR'
+            continue 
+
+        if os.path.isfile(file_name):
+            continue
+        
+        try:
+            r = requests.get(url, timeout=1.0)
+            txt = r.text
+            with io.open(file_name, 'w', encoding='utf8') as f:
+                f.write(txt)
+                print ('\t wrote', i, url, file_name)
+            time.sleep(5)
+        except Exception as e:
+            path_errs.append(('REQUEST ERROR', i, url, file_name))
+            print 'REQUEST ERROR'
+
+    with open(os.path.join(data_dir, 'bitstream_path_errors.json'), 'w') as ferror:
+        ferror.write(json.dumps(path_errs, indent=2))
 
 class LltRecord(Record):
     """ XML Record handler override for dim metadata format. """    
