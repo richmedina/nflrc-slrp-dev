@@ -12,7 +12,7 @@ STATIC_ROOT = '/Library/WebServer/Documents/static/nflrcllt'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'nflrc-llt-dev-db',
+        'NAME': 'nflrc-slrp-dev-db',
         'USER': 'postgres',
         'PASSWORD': '1',
         'HOST': '127.0.0.1',
