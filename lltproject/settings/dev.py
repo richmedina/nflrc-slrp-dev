@@ -23,8 +23,8 @@ DATABASES = {
 GOOGLE_RECAPTCHA_SECRET_KEY = os.environ['GOOGLE_RECAPTCHA_SECRET_KEY']
 
 
-MEDIA_ROOT = '/Library/WebServer/Documents/media/nflrcllt'
-MEDIA_URL = 'http://localhost/media/nflrcllt/'
+MEDIA_ROOT = '/Library/WebServer/Documents/media/nflrcslrp'
+MEDIA_URL = 'http://localhost/media/nflrcslrp/'
 
 
 # FILEBROWSER SETTINGS
