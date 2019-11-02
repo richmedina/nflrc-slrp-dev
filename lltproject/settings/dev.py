@@ -1,6 +1,6 @@
 from .base import *
 
-ALLOWED_HOSTS += ['clt.developers.edu']
+ALLOWED_HOSTS += ['clt.developers.edu', 'localhost']
 
 SECRET_KEY = os.environ['SECRET_KEY']
 
@@ -13,8 +13,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'nflrc-slrp-dev-db',
-        'USER': 'postgres',
-        'PASSWORD': '1',
+        'USER': 'djangodb_user',
+        'PASSWORD': 'postgres',
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }

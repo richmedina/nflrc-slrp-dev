@@ -1,0 +1,41 @@
+<!-- home.html -->
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+
+{% block page_header %}
+
+{% endblock page_header %}
+
+
+{% block content %}
+
+<div class="row" style="padding-top: 5em">
+	<div class="col-md-12">
+		<h5>Johanna Watzinger-Tharp and Kate Paesani, Editors</h5>
+		<p class="small">Supported by the Center for Language & Technology and the National Foreign Language Resource Center (NFLRC) at the University of Hawaii</p>	
+	</div>
+</div>	
+
+<!-- ROW 1 -->
+<div class="row">
+	<!-- LEFT PANEL -->
+	<div class="col-md-9">
+		<div class="row">
+			<div class="col-md-12">
+				<h3 class="border-space" style="padding: 1em 1em 1em 0em">Volume 1 Coming Soon!</h3>
+			</div>
+			<div class="col-md-12">
+				<p class="lead" style="padding: 3em">Welcome to the new home of the journal of Second Language Research & Practice. The inaugural volume of this online and open access journal is currently under preparation and will be published and made available here. Stay tuned!</p>
+			</div>
+		</div>
+	</div>
+	
+	<!-- RIGHT PANEL -->
+	<div class="col-md-3">{% include 'base-side-menu.html' %}</div>
+
+</div> <!-- End ROW 1 -->
+	
+{% endblock content %}
+		
+
