@@ -73,7 +73,7 @@
             <p>
                 <dl>
                 {% for result in object_list %}
-                        <dt><a href="{{ result.object.get_absolute_url }}" class="static_a_display">{{ result.object }}</a> (in <a href="{% url 'collection' result.object.hdr_setSpec.identifier %}"> {{ result.object.hdr_setSpec.name|slice:"0:18" }}</a>)</dt>
+                        <dt><a href="{{ result.object.get_absolute_url }}" class="static_a_display">{{ result.object }}</a> (in{% if result.object.hdr_setSpec.identifier %} <a href="{% url 'collection' result.object.hdr_setSpec.identifier %}"> {{ result.object.hdr_setSpec.name|slice:"0:18" }}</a>){% else %}{{result.object.hdr_setSpec.identifier}} {{result.object}}{% endif %}</dt>
                         <dd>
                             <p>by {% for i in result.object.get_readable_authors %} <a href="{% url 'haystack_search' %}?q={{i}}" title="Search articles for this author.">{{ i }}</a>{% if not forloop.last %}, {% endif %} {% endfor %}
                             </p>
