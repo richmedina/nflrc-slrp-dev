@@ -14,6 +14,7 @@ from lltsite.views import (
     ItemView, 
     ItemViewFull,
     PageView,
+    PageUpdateView,
     PageViewPrivate,
     KeywordBrowseView,
     SearchHaystackView,
@@ -67,6 +68,9 @@ urlpatterns = [
 
     url(r'^page/(?P<pk>\d+)/$',
      PageView.as_view(), name='page_view'),
+
+    url(r'^page/edit/(?P<pk>\d+)/$',
+     PageUpdateView.as_view(), name='page_update_view'),
 
     url(r'^keys/$',
      KeywordBrowseView.as_view(), name='keyword_browse_view'),
