@@ -1,5 +1,8 @@
 from django.conf.urls import include, url
 from django.contrib import admin
+
+from django.contrib.auth import views as auth_views
+
 admin.autodiscover()
 
 from filebrowser.sites import site
@@ -151,6 +154,9 @@ urlpatterns = [
     url(r'^admin/filebrowser/', include(site.urls)),
     url(r'^grappelli/', include('grappelli.urls')), # grappelli URLS
     url(r'^admin/', include(admin.site.urls), name='index'),
+
+    url(r'^login/$', auth_views.LoginView.as_view(), name='login_user'),
+    url(r'^logout/$', auth_views.LogoutView.as_view(next_page='/'), name='logout_user'),
 
     url(r'^(?P<slug>[-\w]+)/$',
      PageView.as_view(), name='page_slug_view'),

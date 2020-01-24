@@ -24,6 +24,9 @@ from .mixins import RecordSearchMixin
 from .forms import CreateSubscriberForm, UpdateImpactFactorForm, PageUpdateForm
 
 
+
+
+
 class HomeView(TemplateView):
     template_name = 'home-prerelease.html'
     queryset = None
