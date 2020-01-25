@@ -42,4 +42,6 @@ Thumbs.db
 prod-wsgi.py
 prod-nflrcllt-hawaii-edu.py
 
+full_text.json
+
 

@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,400,300,600' rel='stylesheet' type='text/css'> 
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,400,300,600' rel='stylesheet' type='text/css'> 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -40,17 +40,16 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                
-                <ul class="nav navbar-nav">
-                    <li><a class="navbar-brand" href="{% url 'home' %}"><img height="70px" style="margin-top: 0px; margin-left:15px" src="{% static 'img/aausc-logo.png' %}"></a></li>
-                    <li>
-                        <h2>Second Language Research & Practice </h2>
-                        <p style="width: 480px"><i>A refereed journal of the AAUSC addressing postsecondary language education from theoretical, empirical, and practical perspectives</i></p>
-                    </li>  
-                </ul>
+                <a class="navbar-brand" href="{% url 'home' %}"><img height="70px" style="margin-top: 0px; margin-left:15px" src="https://nflrc.hawaii.edu/media/img/OJ01icon.png"></a>
             </div>
 
             <div class="collapse navbar-collapse" id="main-menu" style="background-color: #fff">
+                <ul class="nav navbar-nav"><a href="{% url 'home' %}" class="static_a_display"></a>
+                    <li>
+                        <h2>Language Learning & Technology</h2>
+                        <h5>A refereed journal for second and foreign language scholars and educators.</h5>
+                    </li>  
+                </ul>
 
 
                 <form class="navbar-form navbar-right" method="get" action="{% url 'haystack_search' %}">
