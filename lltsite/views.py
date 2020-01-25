@@ -135,7 +135,7 @@ class PageView(DetailView):
         return context
 
 
-class PageUpdateView(UpdateView):
+class PageUpdateView(LoginRequiredMixin, UpdateView):
     model = StoryPage
     template_name = 'page_view_update.html'
     form_class = PageUpdateForm

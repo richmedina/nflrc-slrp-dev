@@ -11,9 +11,9 @@
 <div class="row">
 	<div class="col-md-9">
 		<form method="post" action="">{% csrf_token %}
-			{{ form | crispy }}
-			
-			<button type="submit" class="btn btn-md btn-block btn-success">Update</button>
+			<p class="text-right"><a href="{% url 'page_slug_view' object.slug %}" class="btn btn-md btn-link btn-default">Cancel</a> <button type="submit" class="btn btn-md btn-success">Save</button></p>
+			{{ form | crispy }}			
+			<p class="text-right"><a href="{% url 'page_slug_view' object.slug %}" class="btn btn-md btn-link btn-default">Cancel</a> <button type="submit" class="btn btn-md btn-success">Save</button></p>
 		</form>
 	</div>
 	<div class="col-md-3">{% include 'base-side-menu.html' %}</div>
@@ -38,7 +38,7 @@
     	toolbar: 'undo redo | styleselect | link unlink | bold italic | alignleft aligncenter alignright alignjustify |' +
       	' bullist numlist outdent indent | image media fullpage | ' +
       	'forecolor backcolor | help',
-	    height: 900,
+	    height: 500,
 	    menubar: true,
 	    // toolbar: 'undo redo | code link visualblocks fullscreen',
 	    relative_urls: false,
