@@ -28,7 +28,7 @@ from .forms import CreateSubscriberForm, UpdateImpactFactorForm, PageUpdateForm
 
 
 class HomeView(TemplateView):
-    template_name = 'home.html'
+    template_name = 'home-prerelease.html'
     queryset = None
 
     def get_context_data(self, **kwargs):
