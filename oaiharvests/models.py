@@ -167,6 +167,7 @@ class Collection(TimeStampedModel):
             rec_obj = rec[0]       # Record object
             rec_data = rec_obj.as_dict()  # Fetch the record data
             # print rec, rec_data['type'], rec_data['llt.topic'] or None
+            # print rec, rec_data['type'], rec_data['type'] or None
             try:
                 for rec_type in rec_data['type']:
                     toc_item = [rec_obj, [], [], '']  # Set defaults (rec object, authors, abstract, start page)
